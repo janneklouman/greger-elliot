@@ -9,5 +9,4 @@ After:
 # Caution: Indentation through two spaces, not tabs
 SilverStripe\View\SSViewer:
   themes:
-    - 'simple'
     - '$default'

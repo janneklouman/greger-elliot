@@ -1,0 +1,10 @@
+---
+Name: gregerelliotroutes
+After:
+  - '#rootroutes'
+  - '#modelascontrollerroutes'
+  - '#restfulserverroutes'
+---
+Director:
+  rules:
+   'api/v1': 'GregerElliot\API'

@@ -3,12 +3,10 @@
 	"description": "The SilverStripe Framework Installer",
 	"require": {
 		"php": ">=5.5.0",
-		"silverstripe/cms": "4.0.x-dev",
-		"silverstripe/framework": "4.0.x-dev",
-		"silverstripe/reports": "4.0.x-dev",
-		"silverstripe/siteconfig": "4.0.x-dev",
-		"silverstripe-themes/simple": "~3.2.0",
-		"silverstripe/asset-admin": "1.0.x-dev"
+		"silverstripe/cms": "3.5.x-dev",
+		"silverstripe/framework": "3.5.x-dev",
+		"silverstripe/reports": "3.5.x-dev",
+		"silverstripe/siteconfig": "3.5.x-dev"
 	},
 	"require-dev": {
 		"phpunit/PHPUnit": "~4.8"

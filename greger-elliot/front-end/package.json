@@ -1,0 +1,21 @@
+{
+  "name": "gregerelliot",
+  "version": "1.0.0",
+  "description": "Greger Elliot SilverStripe app",
+  "private": true,
+  "repository": "https://github.com/janneklouman/greger-elliot.git",
+  "author": "Janne Klouman <janne@klouman.com>",
+  "dependencies": {
+    "axios": "^0.15.3",
+    "babel-eslint": "6",
+    "babelify": "^6.0.2",
+    "browserify": "^9.0.7",
+    "eslint": "^3.12.0",
+    "eslint-plugin-react": "^6.8.0",
+    "gulp": "^3.8.11",
+    "gulp-plumber": "^1.0.0",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}

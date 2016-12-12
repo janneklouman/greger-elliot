@@ -1,7 +1,7 @@
 <?php
 
 global $project;
-$project = 'mysite';
+$project = 'greger-elliot';
 
 global $database;
 $database = 'greger';

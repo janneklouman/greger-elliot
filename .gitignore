@@ -7,12 +7,14 @@ _ss_environment.php
 # ignore build tools
 /tools/phing-metadata
 
-# ignore composer vendor folder
+# ignore composer vendor folder and node modules
 /vendor/
+node_modules/
 
 /cms/
 /asset-admin/
 /framework/
 /reports/
+/restfulserver/
 /siteconfig/
 /.idea/
