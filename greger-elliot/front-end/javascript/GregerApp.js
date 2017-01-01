@@ -1,10 +1,13 @@
 import axios                from 'axios';
 import React                from 'react';
 import NavigationComponent  from './navigation/NavigationComponent';
+import PageComponent        from './content/PageComponent';
+import LogoComponent        from './content/LogoComponent';
 import {
     API_ENDPOINT_MENU,
+    API_ENDPOINT_LOGO,
     API_ENDPOINT_LANGUAGE_SELECTOR,
-    API_ENDPOINT_CONTENT
+    API_ENDPOINT_CONTENT,
 } from './yellow-pages';
 
 /**
@@ -24,16 +27,22 @@ class GregerApp extends React.Component {
     constructor( props, context ) {
         super( props, context );
 
-        // todo: get from cookie
-        let locale = 'sv_SE';
-
         // Save API requests here for easy tearing down.
         this.ongoingApiRequests = [];
 
+        // SilverStripe page classes for which components exist
+        this.pageComponents = [
+            'Page',
+            'SlideShowPage'
+        ];
+
+        // todo: get from cookie
+        let locale = 'sv_SE';
+
         // Initial state.
         this.state = {
-            currentPageID:  0,
-            content:        '',
+            currentPage:    {},
+            logo:           {},
             menuItems:      [],
             languages:      [],
             currentLocale:  locale
@@ -47,8 +56,9 @@ class GregerApp extends React.Component {
     componentDidMount() {
 
         this.loadMenu();
+        this.loadLogo();
         this.loadLanguageSelector();
-        this.loadContent(this.state.currentPageID);
+        this.loadContent(this.state.currentPage.pageID);
 
     }
 
@@ -63,7 +73,26 @@ class GregerApp extends React.Component {
             .then((result) => {
                 this.setState({
                     menuItems: result.data,
-                    currentPageID: result.data[0].pageID
+                    currentPage: result.data[0]
+                });
+            });
+
+        // Save to array of ongoing server requests.
+        this.ongoingApiRequests.push(request)
+
+    }
+
+    /**
+     * Sends a request to the back end for the logo and updates
+     * state.
+     */
+    loadLogo() {
+
+        // Get logo data from the back end.
+        let request = axios.get(API_ENDPOINT_LOGO)
+            .then((result) => {
+                this.setState({
+                    logo: result.data
                 });
             });
 
@@ -102,7 +131,7 @@ class GregerApp extends React.Component {
         let request = axios.get(API_ENDPOINT_CONTENT + pageID)
                 .then((result) => {
                     this.setState({
-                        content: result.data.content
+                        currentPage: result.data
                     });
                 });
 
@@ -114,12 +143,12 @@ class GregerApp extends React.Component {
     /**
      * Click handler for navigation menu items.
      *
-     * @param   pageID    ID that is used to grab the right data from the back end.
+     * @param   page    Page object used to grab the right data from the back end.
      */
-    handleOnMenuItemClick(pageID) {
+    handleOnMenuItemClick(page) {
 
-        this.setState({currentPageID: pageID});
-        this.loadContent(pageID);
+        this.setState({currentPage: page});
+        this.loadContent(page.pageID);
 
     }
 
@@ -143,7 +172,7 @@ class GregerApp extends React.Component {
         return (
             <div>
                 <section>
-                    <h1>Current view: {this.state.currentPageID}</h1>
+                    <LogoComponent logo={this.state.logo} />
                     { this.renderNavigation() }
                 </section>
                 <section>
@@ -163,7 +192,7 @@ class GregerApp extends React.Component {
         return (
             <NavigationComponent
                 menuItems={this.state.menuItems}
-                focusedItemPageID={this.state.currentPageID}
+                focusedMenuItemPageID={this.state.currentPage.pageID}
                 onMenuItemClick={this.handleOnMenuItemClick.bind(this)}
             />
         );
@@ -175,7 +204,19 @@ class GregerApp extends React.Component {
      * @returns {XML}
      */
     renderContent() {
-        return <div dangerouslySetInnerHTML={{__html: this.state.content}}></div>
+
+        // Dynamically render component if the class name exists as a page component.
+        if (!!(this.state.currentPage.className in this.pageComponents)) {
+            return React.createElement(
+                this.pageComponents[this.state.currentPage.className] + 'Component',
+                {
+                    page: this.state.currentPage
+                }
+            );
+        }
+
+        return <PageComponent page={this.state.currentPage} />;
+
     }
 
     /**

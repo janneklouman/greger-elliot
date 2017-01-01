@@ -1,0 +1,55 @@
+*, *:after, *:before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; }
+
+@font-face {
+  font-family: 'loraregular';
+  src: url("../font/lora/lora-regular-webfont.woff2") format("woff2"), url("../font/lora/lora-regular-webfont.woff") format("woff"), url("../font/lora/lora-regular-webfont.ttf") format("truetype"), url("../font/lora/lora-regular-webfont.svg#loraregular") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'mograregular';
+  src: url("../font/mogra/mogra-regular-webfont.woff2") format("woff2"), url("../font/mogra/mogra-regular-webfont.woff") format("woff"), url("../font/mogra/mogra-regular-webfont.ttf") format("truetype"), url("../font/mogra/mogra-regular-webfont.svg#mograregular") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+html {
+  font-size: 18px; }
+
+h1 {
+  font-family: 'loraregular', serif;
+  color: #232326;
+  font-size: 1.5rem; }
+
+p {
+  font-size: 1rem;
+  font-family: 'loraregular', serif;
+  color: #232326;
+  line-height: 1.5; }
+
+.logo {
+  max-width: 100%; }
+
+.menu-item {
+  cursor: pointer;
+  font-family: 'mograregular', serif;
+  font-size: 1.5rem; }
+  .menu-item:hover {
+    color: ORANGE; }
+  .menu-item--focused {
+    color: DARKORANGE; }
+
+.content-component--page {
+  padding: 4vw 4vw 0 20px;
+  max-width: 700px; }
+
+#greger-elliot-root section:nth-of-type(1) {
+  float: left;
+  width: 380px;
+  padding: 2vw; }
+
+#greger-elliot-root section:nth-of-type(2) {
+  float: left;
+  width: calc(100% - 380px); }

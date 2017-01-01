@@ -12,8 +12,8 @@ class NavigationComponent extends React.Component {
     /**
      * NavigationComponent constructor.
      *
-     * @param props
-     * @param context
+     * @param   props
+     * @param   context
      */
     constructor(props, context) {
         super(props, context);
@@ -21,13 +21,23 @@ class NavigationComponent extends React.Component {
         this.state = {
             focusedMenuItemPageID: this.props.focusedMenuItemPageID
         };
-
     };
 
     /**
+     * Wait for props to be passed from API.
+     *
+     * @param   nextProps
+     */
+    componentWillReceiveProps(nextProps) {
+        if (this.state.focusedMenuItemPageID !== nextProps.focusedMenuItemPageID) {
+            this.setState({ focusedMenuItemPageID: nextProps.focusedMenuItemPageID });
+        }
+    }
+
+    /**
      * Click event handler. Updates the currently focused item index, and
-     * passes a page ID corresponding to the clicked item, allowing it to
-     * get data corresponding to the clicked item from the back end.
+     * passes a page object corresponding to the clicked item, allowing
+     * the back end to fetch data corresponding to the clicked item.
      *
      * @param   item    Page object corresponding to the clicked menu item.
      */
@@ -37,7 +47,7 @@ class NavigationComponent extends React.Component {
         this.setState({ focusedMenuItemPageID: item.pageID });
 
         // Call onMenuItemClick on parent.
-        this.props.onMenuItemClick(item.pageID);
+        this.props.onMenuItemClick(item);
 
     };
 
@@ -64,16 +74,18 @@ class NavigationComponent extends React.Component {
                 classes.push('menu-item--focused');
             }
 
-            return  <li key={ item.key }
-                       className={ classes.join(' ') }
-                       onClick={ this.handleClick.bind(this, item) }>
+            return (
+                <li key={ item.key }
+                    className={ classes.join(' ') }
+                    onClick={ this.handleClick.bind(this, item) }>
                         { item.menuTitle }
-                    </li>
+                </li>
+            )
         };
 
         return (
             <ul>
-                { this.props.menuItems.map( displayMenuItem ) }
+                { this.props.menuItems ? this.props.menuItems.map( displayMenuItem ) : '' }
             </ul>
         );
 

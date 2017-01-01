@@ -1,0 +1,20 @@
+/////                                     //
+////      Greger Elliot navigation       ///
+///  Janne Klouman <janne@klouman.com>  ////
+//                                     /////
+
+.menu-item {
+
+  cursor: pointer;
+  font-family: 'mograregular', serif;
+  font-size: 1.5rem;
+
+  &:hover {
+    color: ORANGE;
+  }
+
+  &--focused {
+    color: DARKORANGE;
+  }
+
+}

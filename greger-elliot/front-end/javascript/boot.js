@@ -13,5 +13,6 @@ import GregerApp    from './GregerApp';
 // Render GregerApp to the DOM.
 ReactDOM.render(
     <GregerApp />,
-    document.querySelector('#greger-elliot')
+    document.querySelector('#greger-elliot-root')
 );
+ 

@@ -3,6 +3,7 @@
     <head
         data-api-base="{$AbsoluteBaseURL}api/v1/"
         data-api-endpoint-menu="{$AbsoluteBaseURL}api/v1/menu/"
+        data-api-endpoint-logo="{$AbsoluteBaseURL}api/v1/logo/"
         data-api-endpoint-language-selector="{$AbsoluteBaseURL}api/v1/language_selector/"
         data-api-endpoint-content="{$AbsoluteBaseURL}api/v1/content/">
 
@@ -13,12 +14,12 @@
         <meta name="viewport"   content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <meta name="creator"    content="Janne Klouman <janne@klouman.com">
         <meta name="publisher"  content="Elliot Elliot <elliot@elliotelliot.com">
-
+        <link rel="stylesheet"  href="/greger-elliot/front-end/dist/css/bundle.css">
     </head>
     <body>
 
         $Form
-        <div id="greger-elliot"></div>
+        <div id="greger-elliot-root"></div>
         <script type="text/javascript" src="/greger-elliot/front-end/dist/javascript/bundle.js"></script>
 
     </body>

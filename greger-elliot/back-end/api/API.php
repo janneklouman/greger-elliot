@@ -18,7 +18,8 @@ class API extends \Controller {
         'index',
         'menu',
         'language_selector',
-        'content'
+        'content',
+        'logo'
     ];
 
     /**
@@ -31,20 +32,31 @@ class API extends \Controller {
         // Set response headers and status code.
         $this->getResponse()->setStatusCode(200);
         $this->getResponse()->addHeader('Content-Type', 'application/json');
+        
+        $result = Helper::load_cache('GregerElliotMenuCache');
 
-        $filter = [
-            'ShowInMenus' => true
-        ];
+        // The cache is empty, grab from database and save to cache.
+        if (empty($result)) {
 
-        // Grab a specific page ID from the menu.
-        if ($specificPageID = (int) $request->param('ID')) {
-          $filter['ID'] = $specificPageID;
+            $filter = [
+                'ShowInMenus' => true
+            ];
+
+            // Grab a specific page ID from the menu.
+            if($specificPageID = (int) $request->param('ID')) {
+                $filter['ID'] = $specificPageID;
+            }
+
+            // Fetch the result.
+            $result = \Page::get()->filter($filter);
+            $result = json_encode($result->toArray());
+
+            // Cache the result
+            Helper::save_cache('GregerElliotMenuCache', $result);
+
         }
 
-        // Fetch the result.
-        $result = \Page::get()->filter($filter);
-
-        return json_encode($result->toArray());
+        return $result;
     }
 
     /**
@@ -85,6 +97,39 @@ class API extends \Controller {
         $result = \Page::get()->filter($filter)->first();
 
         return json_encode($result);
+    }
+
+    /**
+     * @param   \SS_HTTPRequest $request
+     * @return  string
+     */
+    public function logo(\SS_HTTPRequest $request)
+    {
+        // Set response headers and status code.
+        $this->getResponse()->setStatusCode(200);
+        $this->getResponse()->addHeader('Content-Type', 'application/json');
+
+        $result = Helper::load_cache('GregerElliotLogoCache', 'SiteConfig');
+
+        if (empty($result)) {
+            $siteConfig = \SiteConfig::current_site_config();
+            $logo = $siteConfig->Logo()->ScaleWidth(640);
+            
+            $result = json_encode(
+                [
+                    'title'     => $logo->Title,
+                    'created'   => $logo->Created,
+                    'photoID'   => $logo->ID,
+                    'className' => 'Image',
+                    'href'      => stripslashes($logo->getAbsoluteURL()),
+                    'key'       => 'photo-' . $logo->ID // used by react
+                ]
+            );
+
+            Helper::save_cache('GregerElliotLogoCache', $result, 'SiteConfig');
+        }
+
+        return $result;
     }
 
 }
