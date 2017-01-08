@@ -1,8 +1,9 @@
-import axios                from 'axios';
-import React                from 'react';
-import NavigationComponent  from './navigation/NavigationComponent';
-import PageComponent        from './content/PageComponent';
-import LogoComponent        from './content/LogoComponent';
+import axios                    from 'axios';
+import React                    from 'react';
+import NavigationComponent      from './navigation/NavigationComponent';
+import PageComponent            from './content/PageComponent';
+import SlideShowPageComponent   from './content/SlideShowPageComponent';
+import LogoComponent            from './content/LogoComponent';
 import {
     API_ENDPOINT_MENU,
     API_ENDPOINT_LOGO,
@@ -206,13 +207,8 @@ class GregerApp extends React.Component {
     renderContent() {
 
         // Dynamically render component if the class name exists as a page component.
-        if (!!(this.state.currentPage.className in this.pageComponents)) {
-            return React.createElement(
-                this.pageComponents[this.state.currentPage.className] + 'Component',
-                {
-                    page: this.state.currentPage
-                }
-            );
+        if ('SlideShowPage' === this.state.currentPage.className) {
+            return <SlideShowPageComponent page={this.state.currentPage} />;
         }
 
         return <PageComponent page={this.state.currentPage} />;

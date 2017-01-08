@@ -4,6 +4,7 @@
   box-sizing: border-box;
 }
 
+@import 'third-party/slick';
 @import 'variables';
 @import 'typography';
 @import 'logo';
@@ -17,15 +18,20 @@
 
   // Logo + large screen device menu section.
   section:nth-of-type(1) {
-    float: left;
-    width: 380px;
-    padding: 2vw;
+    width: $width-section-first;
+    padding: 20px 0 20px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
   }
 
   // Content section.
   section:nth-of-type(2) {
-    float: left;
-    width: calc(100% - 380px);
+    width: calc(100% - #{$width-section-first});
+    padding: 20px;
+    position: relative;
+    top: 0;
+    left: $width-section-first;
   }
 
 }

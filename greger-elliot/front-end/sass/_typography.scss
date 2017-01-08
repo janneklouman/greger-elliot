@@ -5,6 +5,7 @@
 
 // Lora regular font
 @font-face {
+
   font-family: 'loraregular';
   src: url('../font/lora/lora-regular-webfont.woff2') format('woff2'),
   url('../font/lora/lora-regular-webfont.woff') format('woff'),
@@ -12,10 +13,12 @@
   url('../font/lora/lora-regular-webfont.svg#loraregular') format('svg');
   font-weight: normal;
   font-style: normal;
+
 }
 
 // Mogra regular font
 @font-face {
+
   font-family: 'mograregular';
   src: url('../font/mogra/mogra-regular-webfont.woff2') format('woff2'),
   url('../font/mogra/mogra-regular-webfont.woff') format('woff'),
@@ -23,21 +26,47 @@
   url('../font/mogra/mogra-regular-webfont.svg#mograregular') format('svg');
   font-weight: normal;
   font-style: normal;
+
 }
 
 html {
+
   font-size: 18px;
+
 }
 
 h1 {
+
   font-family: 'loraregular', serif;
   color: $color-gray-text;
   font-size: $font-size-h1;
+  margin-bottom: 1.5rem;
+
+}
+
+h2,h3,h4 {
+
+  margin-bottom: 1rem;
+
 }
 
 p {
+
   font-size: $font-size-p;
   font-family: 'loraregular', serif;
   color: $color-gray-text;
   line-height: 1.5;
+  margin-bottom: 1rem;
+
+}
+
+// Text selection color.
+::selection {
+  background: DARKORANGE;
+  color: SNOW;
+}
+
+::-moz-selection {
+  background: DARKORANGE;
+  color: SNOW;
 }

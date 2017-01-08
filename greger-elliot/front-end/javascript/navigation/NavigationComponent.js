@@ -84,7 +84,7 @@ class NavigationComponent extends React.Component {
         };
 
         return (
-            <ul>
+            <ul className="menu">
                 { this.props.menuItems ? this.props.menuItems.map( displayMenuItem ) : '' }
             </ul>
         );

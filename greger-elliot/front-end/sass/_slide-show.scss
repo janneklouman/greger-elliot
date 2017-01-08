@@ -3,3 +3,25 @@
 ///  Janne Klouman <janne@klouman.com>  ////
 //                                     /////
 
+.slick-slide {
+
+  height: auto;
+  max-height: 80vh;
+
+}
+
+.slick-arrow {
+
+  position: absolute;
+
+  &.slick-prev {
+      top: 100%;
+      left: 0;
+  }
+
+  &.slick-next {
+    top: 100%;
+    right: 0;
+  }
+
+}

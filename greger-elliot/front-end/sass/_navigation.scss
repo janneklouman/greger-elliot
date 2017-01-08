@@ -3,11 +3,24 @@
 ///  Janne Klouman <janne@klouman.com>  ////
 //                                     /////
 
+.menu {
+
+  list-style-type: none;
+
+}
+
 .menu-item {
 
   cursor: pointer;
   font-family: 'mograregular', serif;
   font-size: 1.5rem;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 
   &:hover {
     color: ORANGE;
