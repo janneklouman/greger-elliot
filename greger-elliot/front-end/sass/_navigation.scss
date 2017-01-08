@@ -5,29 +5,32 @@
 
 .menu {
 
-  list-style-type: none;
+	list-style-type: none;
+	text-align: center;
+	padding: 25px 0;
 
 }
 
 .menu-item {
 
-  cursor: pointer;
-  font-family: 'mograregular', serif;
-  font-size: 1.5rem;
+	cursor: pointer;
+	font-family: 'mograregular', serif;
+	font-size: 1.75rem;
+	color: MIDNIGHTBLUE;
 
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 
-  &:hover {
-    color: ORANGE;
-  }
+	&:hover {
+		color: ORANGE;
+	}
 
-  &--focused {
-    color: DARKORANGE;
-  }
+	&--focused {
+		color: DARKORANGE;
+	}
 
 }

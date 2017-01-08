@@ -56,6 +56,9 @@ class SlideShowPage extends Page implements JsonSerializable
 
     }
 
+	/**
+	 * @return array
+	 */
     private function imagesAsJson()
     {
         $images = [];
@@ -63,13 +66,22 @@ class SlideShowPage extends Page implements JsonSerializable
         foreach ($this->Images() as $image) {
 
             $imageObject = [
-                'title'     => $image->Title,
-                'width'     => $image->getWidth(),
-                'height'    => $image->getHeight(),
-                'src'       => $image->AbsoluteLink()
+                'width'       	=> $image->getWidth(),
+                'height'      	=> $image->getHeight(),
+                'original'    	=> $image->AbsoluteLink(),
+				'originalAlt' 	=> $image->Title,
+				'description'	=> $image->Title,
+				'srcSet' 	  	=> join(', ', [
+					$image->ScaleWidth(750)->AbsoluteLink() . ' 750w',
+					$image->ScaleWidth(1500)->AbsoluteLink() . ' 1500w',
+					$image->ScaleWidth(3000)->AbsoluteLink() . ' 3000w',
+				]),
+				'sizes'			=> join(', ', [
+					'(max-width: 1200px) and (min-width: 769px) calc(100vw - 320px)',
+					'(max-width: 768px)  and (min-width: 319px) calc(100vw - 40px)',
+					'calc(100vw - 420px)'
+				])
             ];
-
-
             $images[] = $imageObject;
         }
 

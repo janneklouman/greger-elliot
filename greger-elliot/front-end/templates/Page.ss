@@ -18,8 +18,12 @@
     </head>
     <body>
 
-        $Form
-        <div id="greger-elliot-root"></div>
+		<% if $Form %>
+			$Form
+		<% else %>
+        	<div id="greger-elliot-root"></div>
+		<% end_if %>
+
         <script type="text/javascript" src="/greger-elliot/front-end/dist/javascript/bundle.js"></script>
 
     </body>

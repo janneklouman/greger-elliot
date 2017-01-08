@@ -25,3 +25,10 @@
   }
 
 }
+
+.image-gallery-image img {
+	max-width: 100%;
+	max-height: calc(100vh - #{($padding-section * 2) - $height-slideshow-controls});
+	height: auto;
+	width: auto;
+}

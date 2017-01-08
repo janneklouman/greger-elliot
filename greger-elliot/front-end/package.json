@@ -18,7 +18,7 @@
     "gulp-sass": "^3.0.0",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
-    "react-slick": "^0.14.5",
+    "react-image-gallery": "^0.7.10",
     "slick-carousel": "^1.6.0",
     "vinyl-source-stream": "^1.1.0"
   }

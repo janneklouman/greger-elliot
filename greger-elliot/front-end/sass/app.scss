@@ -1,11 +1,12 @@
 *, *:after, *:before {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
-@import 'third-party/slick';
+@import '../node_modules/react-image-gallery/styles/scss/image-gallery.scss';
 @import 'variables';
+@import 'mixins';
 @import 'typography';
 @import 'logo';
 @import 'navigation';
@@ -16,22 +17,33 @@
 // Site structure.
 #greger-elliot-root {
 
-  // Logo + large screen device menu section.
-  section:nth-of-type(1) {
-    width: $width-section-first;
-    padding: 20px 0 20px 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
-  }
+	// Logo + large screen device menu section.
+	section.first {
 
-  // Content section.
-  section:nth-of-type(2) {
-    width: calc(100% - #{$width-section-first});
-    padding: 20px;
-    position: relative;
-    top: 0;
-    left: $width-section-first;
-  }
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: $width-section-first;
+		padding: $padding-section 0 $padding-section $padding-section;
+
+		@include tablet {
+			width: $width-section-first-tablet;
+		}
+	}
+
+	// Content section.
+	section.second {
+
+		position: relative;
+		top: 0;
+		left: $width-section-first;
+		width: calc(100% - #{$width-section-first});
+		padding: $padding-section;
+
+		@include tablet {
+			left: $width-section-first-tablet;
+			width: calc(100% - #{$width-section-first-tablet});
+		}
+	}
 
 }

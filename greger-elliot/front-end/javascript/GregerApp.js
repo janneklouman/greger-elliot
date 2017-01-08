@@ -172,11 +172,11 @@ class GregerApp extends React.Component {
     render() {
         return (
             <div>
-                <section>
+                <section className="first">
                     <LogoComponent logo={this.state.logo} />
                     { this.renderNavigation() }
                 </section>
-                <section>
+                <section className="second">
                     { this.renderContent() }
                 </section>
                 { this.renderLanguageSelector() }
