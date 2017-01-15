@@ -16,7 +16,8 @@
 	cursor: pointer;
 	font-family: 'mograregular', serif;
 	font-size: 1.75rem;
-	color: MIDNIGHTBLUE;
+	color: $color-gray-navigation;
+	text-decoration: none;
 
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -27,6 +28,10 @@
 
 	&:hover {
 		color: ORANGE;
+	}
+
+	&:active {
+		color: DARKORANGE;
 	}
 
 	&--focused {

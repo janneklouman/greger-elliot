@@ -1,42 +1,7 @@
-@charset "UTF-8";
 *, *:after, *:before {
   margin: 0;
   padding: 0;
   box-sizing: border-box; }
-
-/*!
-  Ionicons, v2.0.0
-  Created by Ben Sperry for the Ionic Framework, http://ionicons.com/
-  https://twitter.com/benjsperry  https://twitter.com/ionicframework
-  MIT License: https://github.com/driftyco/ionicons
-
-  Android-style icons originally built by Google’s
-  Material Design Icons: https://github.com/google/material-design-icons
-  used under CC BY http://creativecommons.org/licenses/by/4.0/
-  Modified icons to fit ionicon’s grid from original.
-*/
-@font-face {
-  font-family: "Ionicons";
-  src: url("//cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/fonts/ionicons.eot?v=2.0.0");
-  src: url("//cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/fonts/ionicons.eot?v=2.0.0#iefix") format("embedded-opentype"), url("//cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/fonts/ionicons.ttf?v=2.0.0") format("truetype"), url("//cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/fonts/ionicons.woff?v=2.0.0") format("woff"), url("//cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/fonts/ionicons.svg?v=2.0.0#Ionicons") format("svg");
-  font-weight: normal;
-  font-style: normal; }
-
-.image-gallery-fullscreen-button::before,
-.image-gallery-play-button::before,
-.image-gallery-left-nav::before,
-.image-gallery-right-nav::before {
-  display: inline-block;
-  font-family: "Ionicons";
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  text-rendering: auto;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; }
 
 .image-gallery {
   -webkit-user-select: none;
@@ -135,19 +100,11 @@
 
 .image-gallery-fullscreen-button {
   right: 0; }
-  .image-gallery-fullscreen-button::before {
-    content: ""; }
-  .image-gallery-fullscreen-button.active::before {
-    content: ""; }
   .image-gallery-fullscreen-button.active:hover::before {
     transform: scale(0.9); }
 
 .image-gallery-play-button {
   left: 0; }
-  .image-gallery-play-button::before {
-    content: ""; }
-  .image-gallery-play-button.active::before {
-    content: ""; }
 
 .image-gallery-left-nav,
 .image-gallery-right-nav {
@@ -172,13 +129,9 @@
 
 .image-gallery-left-nav {
   left: 0; }
-  .image-gallery-left-nav::before {
-    content: ""; }
 
 .image-gallery-right-nav {
   right: 0; }
-  .image-gallery-right-nav::before {
-    content: ""; }
 
 .image-gallery-slides {
   line-height: 0;
@@ -378,7 +331,8 @@ p {
   cursor: pointer;
   font-family: 'mograregular', serif;
   font-size: 1.75rem;
-  color: MIDNIGHTBLUE;
+  color: #282e40;
+  text-decoration: none;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -387,30 +341,32 @@ p {
   user-select: none; }
   .menu-item:hover {
     color: ORANGE; }
+  .menu-item:active {
+    color: DARKORANGE; }
   .menu-item--focused {
     color: DARKORANGE; }
 
 .content-component--page {
-  max-width: 700px; }
+  max-width: 700px;
+  padding-top: 40px;
+  padding-left: 25px; }
 
-.slick-slide {
-  height: auto;
-  max-height: 80vh; }
-
-.slick-arrow {
-  position: absolute; }
-  .slick-arrow.slick-prev {
-    top: 100%;
-    left: 0; }
-  .slick-arrow.slick-next {
-    top: 100%;
-    right: 0; }
+.image-gallery-image {
+  text-align: center; }
 
 .image-gallery-image img {
   max-width: 100%;
-  max-height: calc(100vh - 40px);
+  max-height: calc(100vh - 40px - 72px);
   height: auto;
   width: auto; }
+
+.slide-show-description {
+  height: 72px;
+  line-height: 72px;
+  white-space: nowrap;
+  font-size: 24px;
+  margin: 0;
+  text-align: center; }
 
 #greger-elliot-root section.first {
   position: fixed;

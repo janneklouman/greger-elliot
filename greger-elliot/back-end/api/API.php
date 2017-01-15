@@ -32,7 +32,7 @@ class API extends \Controller {
         // Set response headers and status code.
         $this->getResponse()->setStatusCode(200);
         $this->getResponse()->addHeader('Content-Type', 'application/json');
-        
+
         $result = Helper::load_cache('GregerElliotMenuCache');
 
         // The cache is empty, grab from database and save to cache.
@@ -43,8 +43,8 @@ class API extends \Controller {
             ];
 
             // Grab a specific page ID from the menu.
-            if($specificPageID = (int) $request->param('ID')) {
-                $filter['ID'] = $specificPageID;
+            if($specificPageUrlSegment = \Convert::raw2sql($request->param('ID'))) {
+                $filter['URLSegment'] = $specificPageUrlSegment;
             }
 
             // Fetch the result.
@@ -88,15 +88,29 @@ class API extends \Controller {
             'ShowInSearch' => true
         ];
 
-        // Grab a specific page ID from the menu.
-        if ($specificPageID = (int) $request->param('ID')) {
-          $filter['ID'] = $specificPageID;
-        }
+		// Grab a specific page ID from the menu.
+		$specificPageUrlSegment = \Convert::raw2sql($request->param('ID'));
+		if ($specificPageUrlSegment && 'undefined' !== $specificPageUrlSegment) {
+			$filter['URLSegment'] = $specificPageUrlSegment;
+		}
 
-        // Fetch the result.
-        $result = \Page::get()->filter($filter)->first();
+		$result = Helper::load_cache('GregerElliotContentCache' . md5($specificPageUrlSegment));
 
-        return json_encode($result);
+		// The cache is empty, grab from database and save to cache.
+		if (empty($result)) {
+
+			// Fetch the result.
+			$result = \Page::get()->filter($filter)->first();
+
+			// Encode the result.
+			$result = json_encode($result);
+
+			// Cache the result.
+			Helper::save_cache('GregerElliotContentCache' . md5($specificPageUrlSegment), $result);
+
+		}
+
+        return $result;
     }
 
     /**
@@ -114,7 +128,7 @@ class API extends \Controller {
         if (empty($result)) {
             $siteConfig = \SiteConfig::current_site_config();
             $logo = $siteConfig->Logo()->ScaleWidth(640);
-            
+
             $result = json_encode(
                 [
                     'title'     => $logo->Title,

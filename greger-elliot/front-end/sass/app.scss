@@ -4,7 +4,7 @@
 	box-sizing: border-box;
 }
 
-@import '../node_modules/react-image-gallery/styles/scss/image-gallery.scss';
+@import 'image-gallery';
 @import 'variables';
 @import 'mixins';
 @import 'typography';

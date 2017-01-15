@@ -44,14 +44,15 @@ class SlideShowPage extends Page implements JsonSerializable
     public function jsonSerialize() {
 
         return [
-            'title'     => $this->Title,
-            'menuTitle' => $this->MenuTitle,
-            'created'   => $this->Created,
-            'pageID'    => $this->ID,
-            'content'   => $this->Content,
-            'className' => $this->ClassName,
-            'images'    => $this->imagesAsJson(),
-            'key'       => 'page-' . $this->ID // used by react
+            'title'     	=> $this->Title,
+            'menuTitle' 	=> $this->MenuTitle,
+            'created'   	=> $this->Created,
+            'pageID'    	=> $this->ID,
+			'urlSegment' 	=> 1 === $this->ID ? '' : $this->URLSegment,
+            'content'   	=> $this->Content,
+            'className' 	=> $this->ClassName,
+            'images'    	=> $this->imagesAsJson(),
+            'key'       	=> 'page-' . $this->ID // used by react
         ];
 
     }
@@ -70,7 +71,6 @@ class SlideShowPage extends Page implements JsonSerializable
                 'height'      	=> $image->getHeight(),
                 'original'    	=> $image->AbsoluteLink(),
 				'originalAlt' 	=> $image->Title,
-				'description'	=> $image->Title,
 				'srcSet' 	  	=> join(', ', [
 					$image->ScaleWidth(750)->AbsoluteLink() . ' 750w',
 					$image->ScaleWidth(1500)->AbsoluteLink() . ' 1500w',

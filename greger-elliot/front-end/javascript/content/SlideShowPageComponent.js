@@ -17,7 +17,29 @@ class SlideShowPageComponent extends React.Component {
      */
     constructor(props, context) {
         super(props, context);
+
+		let initialTitle = '';
+
+		if (this.props.page.images.length) {
+			initialTitle = this.props.page.images[0].originalAlt;
+		}
+
+		// Initial state.
+		this.state = {
+			currentTitle: initialTitle
+		};
     };
+
+	/**
+	 * Handle when a new image slides into view.
+	 *
+	 * @param 	image
+     */
+	handleImageSlide(image) {
+		this.setState({
+			currentTitle: this.props.page.images[image].originalAlt
+		});
+	}
 
     /**
      * Render SlideShowPageComponent.
@@ -34,7 +56,7 @@ class SlideShowPageComponent extends React.Component {
 			showThumbnails: false,
 			autoPlay: true
 		};
-		
+
         return (
             <article className="content-component content-component--slide-show-page">
 				<ImageGallery
@@ -43,10 +65,11 @@ class SlideShowPageComponent extends React.Component {
 					lazyLoad={galleryOptions.lazyLoad}
 					showNav={galleryOptions.showNav}
 					showThumbnails={galleryOptions.showThumbnails}
-					slideInterval={galleryOptions.slideInterval}
 					slideDuration={galleryOptions.slideDuration}
 					autoPlay={galleryOptions.autoPlay}
+					onSlide={this.handleImageSlide.bind(this)}
 				/>
+				<h1 className="slide-show-description">{this.state.currentTitle}</h1>
             </article>
         );
     }

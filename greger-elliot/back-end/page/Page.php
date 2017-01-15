@@ -18,13 +18,14 @@ class Page extends SiteTree implements JsonSerializable
     public function jsonSerialize() {
 
         return [
-            'title'     => $this->Title,
-            'menuTitle' => $this->MenuTitle,
-            'created'   => $this->Created,
-            'pageID'    => $this->ID,
-            'content'   => $this->Content,
-            'className' => $this->ClassName,
-            'key'       => 'page-' . $this->ID // used by react
+            'title'     	=> $this->Title,
+            'menuTitle' 	=> $this->MenuTitle,
+            'created'   	=> $this->Created,
+			'urlSegment' 	=> $this->URLSegment,
+            'pageID'    	=> $this->ID,
+            'content'   	=> $this->Content,
+            'className' 	=> $this->ClassName,
+            'key'       	=> 'page-' . $this->ID // used by react
         ];
 
     }

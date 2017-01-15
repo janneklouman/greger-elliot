@@ -1,14 +1,13 @@
-import axios                    from 'axios';
-import React                    from 'react';
-import NavigationComponent      from './navigation/NavigationComponent';
-import PageComponent            from './content/PageComponent';
-import SlideShowPageComponent   from './content/SlideShowPageComponent';
-import LogoComponent            from './content/LogoComponent';
+import axios                    	from 'axios';
+import React                    	from 'react';
+import NavigationComponent      	from './navigation/NavigationComponent';
+import LanguageSelectorComponent 	from './navigation/LanguageSelectorComponent';
+import ContentComponent            	from './content/ContentComponent';
+import LogoComponent            	from './content/LogoComponent';
 import {
     API_ENDPOINT_MENU,
     API_ENDPOINT_LOGO,
-    API_ENDPOINT_LANGUAGE_SELECTOR,
-    API_ENDPOINT_CONTENT,
+    API_ENDPOINT_LANGUAGE_SELECTOR
 } from './yellow-pages';
 
 /**
@@ -31,18 +30,12 @@ class GregerApp extends React.Component {
         // Save API requests here for easy tearing down.
         this.ongoingApiRequests = [];
 
-        // SilverStripe page classes for which components exist
-        this.pageComponents = [
-            'Page',
-            'SlideShowPage'
-        ];
-
         // todo: get from cookie
         let locale = 'sv_SE';
 
         // Initial state.
         this.state = {
-            currentPage:    {},
+            urlSegment:     this.props.location.pathname,
             logo:           {},
             menuItems:      [],
             languages:      [],
@@ -59,7 +52,6 @@ class GregerApp extends React.Component {
         this.loadMenu();
         this.loadLogo();
         this.loadLanguageSelector();
-        this.loadContent(this.state.currentPage.pageID);
 
     }
 
@@ -73,8 +65,7 @@ class GregerApp extends React.Component {
         let request = axios.get(API_ENDPOINT_MENU)
             .then((result) => {
                 this.setState({
-                    menuItems: result.data,
-                    currentPage: result.data[0]
+                    menuItems: result.data
                 });
             });
 
@@ -82,6 +73,19 @@ class GregerApp extends React.Component {
         this.ongoingApiRequests.push(request)
 
     }
+
+	/**
+	 * Wait for props to be passed from API.
+	 *
+	 * @param   nextProps
+	 */
+	componentWillReceiveProps(nextProps) {
+		if (this.state.urlSegment !== nextProps.params.urlSegment) {
+			this.setState({
+				urlSegment: nextProps.params.urlSegment
+			});
+		}
+	}
 
     /**
      * Sends a request to the back end for the logo and updates
@@ -122,38 +126,6 @@ class GregerApp extends React.Component {
     }
 
     /**
-     * Sends a request to the back end for content.
-     *
-     * @param   pageID  Page ID to load content from.
-     */
-    loadContent(pageID) {
-
-        // Get content data from the back end based on current page id.
-        let request = axios.get(API_ENDPOINT_CONTENT + pageID)
-                .then((result) => {
-                    this.setState({
-                        currentPage: result.data
-                    });
-                });
-
-        // Save to array of ongoing server requests.
-        this.ongoingApiRequests.push(request)
-
-    }
-
-    /**
-     * Click handler for navigation menu items.
-     *
-     * @param   page    Page object used to grab the right data from the back end.
-     */
-    handleOnMenuItemClick(page) {
-
-        this.setState({currentPage: page});
-        this.loadContent(page.pageID);
-
-    }
-
-    /**
      * Click handler for language selector clicks.
      *
      * @param   locale    The locale to set.
@@ -170,56 +142,20 @@ class GregerApp extends React.Component {
      * @returns {XML}
      */
     render() {
+
         return (
             <div>
                 <section className="first">
                     <LogoComponent logo={this.state.logo} />
-                    { this.renderNavigation() }
+					<NavigationComponent menuItems={this.state.menuItems}/>
                 </section>
                 <section className="second">
-                    { this.renderContent() }
+					<ContentComponent urlSegment={this.state.urlSegment} />
                 </section>
-                { this.renderLanguageSelector() }
+				<LanguageSelectorComponent />
             </div>
         );
-    }
 
-    /**
-     * Renders the navigation.
-     *
-     * @returns {XML}
-     */
-    renderNavigation() {
-        return (
-            <NavigationComponent
-                menuItems={this.state.menuItems}
-                focusedMenuItemPageID={this.state.currentPage.pageID}
-                onMenuItemClick={this.handleOnMenuItemClick.bind(this)}
-            />
-        );
-    }
-
-    /**
-     * Renders the content.
-     *
-     * @returns {XML}
-     */
-    renderContent() {
-
-        // Dynamically render component if the class name exists as a page component.
-        if ('SlideShowPage' === this.state.currentPage.className) {
-            return <SlideShowPageComponent page={this.state.currentPage} />;
-        }
-
-        return <PageComponent page={this.state.currentPage} />;
-
-    }
-
-    /**
-     * @returns {XML}
-     */
-    renderLanguageSelector() {
-        return <div></div>;
     }
 
     /**

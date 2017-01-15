@@ -23,14 +23,8 @@ class PageComponent extends React.Component {
      * @return {XML}
      */
     render() {
-
-        let classes = [
-            'content-component',
-            'content-component--page'
-        ];
-
         return (
-            <article className={classes.join(' ')}>
+            <article className='content-component content-component--page'>
                 <h1>{this.props.page.title}</h1>
                 <p dangerouslySetInnerHTML={{__html: this.props.page.content}}></p>
             </article>

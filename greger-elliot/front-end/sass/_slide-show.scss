@@ -3,32 +3,28 @@
 ///  Janne Klouman <janne@klouman.com>  ////
 //                                     /////
 
-.slick-slide {
+.image-gallery-image {
 
-  height: auto;
-  max-height: 80vh;
-
-}
-
-.slick-arrow {
-
-  position: absolute;
-
-  &.slick-prev {
-      top: 100%;
-      left: 0;
-  }
-
-  &.slick-next {
-    top: 100%;
-    right: 0;
-  }
+	text-align: center;
 
 }
 
 .image-gallery-image img {
+
 	max-width: 100%;
-	max-height: calc(100vh - #{($padding-section * 2) - $height-slideshow-controls});
+	max-height: calc(100vh - #{($padding-section * 2)} - #{$height-slideshow-description});
 	height: auto;
 	width: auto;
+
+}
+
+.slide-show-description {
+
+	height: $height-slideshow-description;
+	line-height: $height-slideshow-description;
+	white-space: nowrap;
+	font-size: $font-size-slideshow-description;
+	margin: 0;
+	text-align: center;
+
 }
