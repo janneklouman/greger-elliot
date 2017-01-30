@@ -14,9 +14,10 @@
 .menu-item {
 
 	cursor: pointer;
-	font-family: 'mograregular', serif;
-	font-size: 1.75rem;
-	color: $color-gray-navigation;
+	font-family: $font-family-menu;
+	font-size: $font-size-navigation;
+	line-height: 1.5;
+	color: $color-navigation;
 	text-decoration: none;
 
 	-webkit-touch-callout: none;

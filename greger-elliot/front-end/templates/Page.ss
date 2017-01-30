@@ -5,6 +5,7 @@
         data-api-endpoint-menu="{$AbsoluteBaseURL}api/v1/menu/"
         data-api-endpoint-logo="{$AbsoluteBaseURL}api/v1/logo/"
         data-api-endpoint-language-selector="{$AbsoluteBaseURL}api/v1/language_selector/"
+        data-api-endpoint-translate-url-segment="{$AbsoluteBaseURL}api/v1/translate_url_segment/"
         data-api-endpoint-content="{$AbsoluteBaseURL}api/v1/content/">
 
         <% base_tag %>

@@ -7,3 +7,5 @@ After:
 SiteConfig:
   extensions:
     - GregerElliot\GregerElliotSiteConfigExtension
+SiteTree:
+  create_default_pages: false

@@ -3,7 +3,7 @@
 ///  Janne Klouman <janne@klouman.com>  ////
 //                                     /////
 
-// Lora regular font
+// Lora regular font.
 @font-face {
 
   font-family: 'loraregular';
@@ -16,14 +16,27 @@
 
 }
 
-// Mogra regular font
+// Roboto medium font.
 @font-face {
 
-  font-family: 'mograregular';
-  src: url('../font/mogra/mogra-regular-webfont.woff2') format('woff2'),
-  url('../font/mogra/mogra-regular-webfont.woff') format('woff'),
-  url('../font/mogra/mogra-regular-webfont.ttf') format('truetype'),
-  url('../font/mogra/mogra-regular-webfont.svg#mograregular') format('svg');
+  font-family: 'roboto-medium';
+  src: url('../font/roboto/roboto-medium.woff2') format('woff2'),
+  url('../font/roboto/roboto-medium.woff') format('woff'),
+  url('../font/roboto/roboto-medium.ttf') format('truetype'),
+  url('../font/roboto/roboto-medium.svg#robotomedium') format('svg');
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+// Roboto black font.
+@font-face {
+
+  font-family: 'roboto-black';
+  src: url('../font/roboto/roboto-black.woff2') format('woff2'),
+  url('../font/roboto/roboto-black.woff') format('woff'),
+  url('../font/roboto/roboto-black.ttf') format('truetype'),
+  url('../font/roboto/roboto-black.svg#robotoblack') format('svg');
   font-weight: normal;
   font-style: normal;
 
@@ -37,7 +50,7 @@ html {
 
 h1 {
 
-  font-family: 'loraregular', serif;
+  font-family: $font-family-heading;
   color: $color-gray-text;
   font-size: $font-size-h1;
   margin-bottom: $margin-bottom-h1;
@@ -53,7 +66,7 @@ h2,h3,h4 {
 p {
 
   font-size: $font-size-p;
-  font-family: 'loraregular', serif;
+  font-family: $font-family-paragraph;
   color: $color-gray-text;
   line-height: 1.5;
   margin-bottom: 1rem;

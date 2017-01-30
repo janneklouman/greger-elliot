@@ -44,7 +44,7 @@ _reactDom2['default'].render(_react2['default'].createElement(
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
-    value: true
+  value: true
 });
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -91,200 +91,263 @@ var _yellowPages = require('./yellow-pages');
  */
 
 var GregerApp = (function (_React$Component) {
-    _inherits(GregerApp, _React$Component);
+  _inherits(GregerApp, _React$Component);
+
+  /**
+   * GregerApp constructor.
+   *
+   * @param   props
+   * @param   context
+   */
+
+  function GregerApp(props, context) {
+    _classCallCheck(this, GregerApp);
+
+    _get(Object.getPrototypeOf(GregerApp.prototype), 'constructor', this).call(this, props, context);
+
+    // Save API requests here for easy tearing down.
+    this.ongoingApiRequests = [];
+
+    // Cache all finished API requests.
+    this.finishedApiRequests = {
+      menu: [],
+      translatedUrlSegments: {
+        en: [],
+        sv: []
+      }
+    };
+
+    // Initial state.
+    this.state = {
+      urlSegment: '',
+      logo: {},
+      menuItems: [],
+      languages: [],
+      language: 'sv'
+    };
+  }
+
+  // Export GregerApp.
+
+  _createClass(GregerApp, [{
+    key: 'componentWillReceiveProps',
 
     /**
-     * GregerApp constructor.
+     * Wait for props to be passed from API.
      *
-     * @param   props
-     * @param   context
+     * @param   nextProps
      */
-
-    function GregerApp(props, context) {
-        _classCallCheck(this, GregerApp);
-
-        _get(Object.getPrototypeOf(GregerApp.prototype), 'constructor', this).call(this, props, context);
-
-        // Save API requests here for easy tearing down.
-        this.ongoingApiRequests = [];
-
-        // todo: get from cookie
-        var locale = 'sv_SE';
-
-        // Initial state.
-        this.state = {
-            urlSegment: this.props.location.pathname,
-            logo: {},
-            menuItems: [],
-            languages: [],
-            currentLocale: locale
-        };
+    value: function componentWillReceiveProps(nextProps) {
+      if (this.state.urlSegment !== nextProps.params.urlSegment) {
+        this.setState({ urlSegment: nextProps.params.urlSegment });
+      }
     }
 
-    // Export GregerApp.
+    /**
+     * Grab initial state data from the back end on mount.
+     */
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
 
-    _createClass(GregerApp, [{
-        key: 'componentDidMount',
+      this.setState({ urlSegment: this.props.params.urlSegment });
+      this.loadMenu(this.state.urlSegment);
+      this.loadLogo();
+      this.loadLanguageSelector();
+    }
 
-        /**
-         * Grab initial state data from the back end on mount.
-         */
-        value: function componentDidMount() {
+    /**
+     * Sends a request to the back end for the menu and updates
+     * state.
+    *
+    * @param	urlSegment	Current url segment.
+     */
+  }, {
+    key: 'loadMenu',
+    value: function loadMenu(urlSegment) {
+      var _this = this;
 
-            this.loadMenu();
-            this.loadLogo();
-            this.loadLanguageSelector();
+      // Load from cache if possible.
+      if (urlSegment in this.finishedApiRequests.menu) {
+
+        // Update state.
+        this.setState({
+          menuItems: this.finishedApiRequests.menu[urlSegment]
+        });
+      }
+
+      // Use API if not in local cache.
+      if (!(urlSegment in this.finishedApiRequests.menu)) {
+
+        // Get menu data from the back end.
+        var request = _axios2['default'].get(_yellowPages.API_ENDPOINT_MENU + urlSegment).then(function (result) {
+
+          // Update state.
+          _this.setState({
+            menuItems: result.data
+          });
+
+          // Save to cached requests.
+          _this.finishedApiRequests.menu[urlSegment] = result.data;
+        });
+
+        // Save to array of ongoing server requests.
+        this.ongoingApiRequests.push(request);
+      }
+    }
+
+    /**
+     * Sends a request to the back end for the logo and updates
+     * state.
+     */
+  }, {
+    key: 'loadLogo',
+    value: function loadLogo() {
+      var _this2 = this;
+
+      // Get logo data from the back end.
+      var request = _axios2['default'].get(_yellowPages.API_ENDPOINT_LOGO).then(function (result) {
+
+        // Update state.
+        _this2.setState({
+          logo: result.data
+        });
+      });
+
+      // Save to array of ongoing server requests.
+      this.ongoingApiRequests.push(request);
+    }
+
+    /**
+     * Sends a request to the back end for the available languages
+     * and updates state.
+     */
+  }, {
+    key: 'loadLanguageSelector',
+    value: function loadLanguageSelector() {
+      var _this3 = this;
+
+      // Get language selector data from the back end.
+      var request = _axios2['default'].get(_yellowPages.API_ENDPOINT_LANGUAGE_SELECTOR).then(function (result) {
+
+        // Update state.
+        _this3.setState({
+          languages: result.data
+        });
+      });
+
+      // Save to array of ongoing server requests.
+      this.ongoingApiRequests.push(request);
+    }
+
+    /**
+     * Translate current URL segment and update state.
+     *
+     * @param   language	A language string eg. 'en'
+        */
+  }, {
+    key: 'switchLanguage',
+    value: function switchLanguage(language) {
+      var _this4 = this;
+
+      this.setState({ language: language });
+
+      // Get language selector data from the back end.
+      var request = _axios2['default'].get(_yellowPages.API_ENDPOINT_TRANSLATE_URL_SEGMENT + this.state.urlSegment + '/' + language).then(function (result) {
+
+        // Update state.
+        _this4.setState({
+          urlSegment: result.data.translatedUrlSegment
+        });
+
+        // Update menu.
+        _this4.loadMenu(result.data.translatedUrlSegment);
+
+        // Update browser URL and history.
+        _this4.props.router.push('/' + result.data.translatedUrlSegment);
+      });
+
+      // Save to array of ongoing server requests.
+      this.ongoingApiRequests.push(request);
+    }
+
+    /**
+     * Click handler for language selector clicks.
+     *
+     * @param   language	A language string eg. 'en'
+     */
+  }, {
+    key: 'handleOnLanguageSelectorClick',
+    value: function handleOnLanguageSelectorClick(language) {
+
+      this.switchLanguage(language);
+    }
+
+    /**
+     * Render GregerApp.
+     *
+     * @returns {XML}
+     */
+  }, {
+    key: 'render',
+    value: function render() {
+
+      return _react2['default'].createElement(
+        'div',
+        null,
+        _react2['default'].createElement(
+          'section',
+          { className: 'first' },
+          _react2['default'].createElement(_contentLogoComponent2['default'], { logo: this.state.logo }),
+          _react2['default'].createElement(_navigationNavigationComponent2['default'], { menuItems: this.state.menuItems })
+        ),
+        _react2['default'].createElement(
+          'section',
+          { className: 'second' },
+          _react2['default'].createElement(_navigationLanguageSelectorComponent2['default'], {
+            languages: this.state.languages,
+            onLanguageChange: this.handleOnLanguageSelectorClick.bind(this),
+            currentLanguage: this.state.language }),
+          _react2['default'].createElement(_contentContentComponent2['default'], { urlSegment: this.state.urlSegment, locale: this.state.locale })
+        )
+      );
+    }
+
+    /**
+     * Abort any active server request on unmount.
+     */
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+
+        for (var _iterator = this.ongoingApiRequests[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var request = _step.value;
+
+          request.abort();
         }
-
-        /**
-         * Sends a request to the back end for the menu and updates
-         * state.
-         */
-    }, {
-        key: 'loadMenu',
-        value: function loadMenu() {
-            var _this = this;
-
-            // Get menu data from the back end.
-            var request = _axios2['default'].get(_yellowPages.API_ENDPOINT_MENU).then(function (result) {
-                _this.setState({
-                    menuItems: result.data
-                });
-            });
-
-            // Save to array of ongoing server requests.
-            this.ongoingApiRequests.push(request);
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator['return']) {
+            _iterator['return']();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
         }
+      }
+    }
+  }]);
 
-        /**
-         * Wait for props to be passed from API.
-         *
-         * @param   nextProps
-         */
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(nextProps) {
-            if (this.state.urlSegment !== nextProps.params.urlSegment) {
-                this.setState({
-                    urlSegment: nextProps.params.urlSegment
-                });
-            }
-        }
-
-        /**
-         * Sends a request to the back end for the logo and updates
-         * state.
-         */
-    }, {
-        key: 'loadLogo',
-        value: function loadLogo() {
-            var _this2 = this;
-
-            // Get logo data from the back end.
-            var request = _axios2['default'].get(_yellowPages.API_ENDPOINT_LOGO).then(function (result) {
-                _this2.setState({
-                    logo: result.data
-                });
-            });
-
-            // Save to array of ongoing server requests.
-            this.ongoingApiRequests.push(request);
-        }
-
-        /**
-         * Sends a request to the back end for the available languages
-         * and updates state.
-         */
-    }, {
-        key: 'loadLanguageSelector',
-        value: function loadLanguageSelector() {
-            var _this3 = this;
-
-            // Get language selector data from the back end.
-            var request = _axios2['default'].get(_yellowPages.API_ENDPOINT_LANGUAGE_SELECTOR).then(function (result) {
-                _this3.setState({
-                    languages: result.data
-                });
-            });
-
-            // Save to array of ongoing server requests.
-            this.ongoingApiRequests.push(request);
-        }
-
-        /**
-         * Click handler for language selector clicks.
-         *
-         * @param   locale    The locale to set.
-         */
-    }, {
-        key: 'handleOnLanguageSelectorClick',
-        value: function handleOnLanguageSelectorClick(locale) {
-
-            this.setState({ currentLocale: locale });
-        }
-
-        /**
-         * Render GregerApp.
-         *
-         * @returns {XML}
-         */
-    }, {
-        key: 'render',
-        value: function render() {
-
-            return _react2['default'].createElement(
-                'div',
-                null,
-                _react2['default'].createElement(
-                    'section',
-                    { className: 'first' },
-                    _react2['default'].createElement(_contentLogoComponent2['default'], { logo: this.state.logo }),
-                    _react2['default'].createElement(_navigationNavigationComponent2['default'], { menuItems: this.state.menuItems })
-                ),
-                _react2['default'].createElement(
-                    'section',
-                    { className: 'second' },
-                    _react2['default'].createElement(_contentContentComponent2['default'], { urlSegment: this.state.urlSegment })
-                ),
-                _react2['default'].createElement(_navigationLanguageSelectorComponent2['default'], null)
-            );
-        }
-
-        /**
-         * Abort any active server request on unmount.
-         */
-    }, {
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
-
-            try {
-
-                for (var _iterator = this.ongoingApiRequests[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var request = _step.value;
-
-                    request.abort();
-                }
-            } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion && _iterator['return']) {
-                        _iterator['return']();
-                    }
-                } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
-                    }
-                }
-            }
-        }
-    }]);
-
-    return GregerApp;
+  return GregerApp;
 })(_react2['default'].Component);
 
 exports['default'] = GregerApp;
@@ -367,22 +430,8 @@ var ContentComponent = (function (_React$Component) {
    * Initial setup.
    */
 		value: function componentDidMount() {
-			var _this = this;
 
-			// Get content data from the back end based on current page id.
-			var request = _axios2['default'].get(_yellowPages.API_ENDPOINT_CONTENT + this.props.urlSegment).then(function (result) {
-
-				// Update state.
-				_this.setState({
-					currentPage: result.data
-				});
-
-				// Save to cached requests.
-				_this.finishedApiRequests[result.data.urlSegment] = result.data;
-			});
-
-			// Save to array of ongoing server requests.
-			this.ongoingApiRequests.push(request);
+			this.loadContent(this.props.urlSegment);
 		}
 
 		/**
@@ -393,6 +442,7 @@ var ContentComponent = (function (_React$Component) {
 	}, {
 		key: 'componentWillReceiveProps',
 		value: function componentWillReceiveProps(nextProps) {
+
 			if (this.props.urlSegment !== nextProps.urlSegment) {
 				this.loadContent(nextProps.urlSegment);
 			}
@@ -406,7 +456,7 @@ var ContentComponent = (function (_React$Component) {
 	}, {
 		key: 'loadContent',
 		value: function loadContent(urlSegment) {
-			var _this2 = this;
+			var _this = this;
 
 			// Load from cache if possible.
 			if (urlSegment in this.finishedApiRequests) {
@@ -415,6 +465,8 @@ var ContentComponent = (function (_React$Component) {
 				this.setState({
 					currentPage: this.finishedApiRequests[urlSegment]
 				});
+
+				document.title = this.state.currentPage.title + ' - Greger Elliot';
 			}
 
 			// Use API if not in local cache.
@@ -424,12 +476,14 @@ var ContentComponent = (function (_React$Component) {
 				var request = _axios2['default'].get(_yellowPages.API_ENDPOINT_CONTENT + urlSegment).then(function (result) {
 
 					// Update state.
-					_this2.setState({
+					_this.setState({
 						currentPage: result.data
 					});
 
+					document.title = _this.state.currentPage.title + ' - Greger Elliot';
+
 					// Save to cached requests.
-					_this2.finishedApiRequests[urlSegment] = result.data;
+					_this.finishedApiRequests[urlSegment] = result.data;
 				});
 
 				// Save to array of ongoing server requests.
@@ -678,32 +732,59 @@ var SlideShowPageComponent = (function (_React$Component) {
 
 		_get(Object.getPrototypeOf(SlideShowPageComponent.prototype), 'constructor', this).call(this, props, context);
 
-		var initialTitle = '';
-
-		if (this.props.page.images.length) {
-			initialTitle = this.props.page.images[0].originalAlt;
-		}
-
 		// Initial state.
 		this.state = {
-			currentTitle: initialTitle
+			currentTitle: '',
+			images: []
 		};
 	}
 
 	// Export SlideShowPageComponent.
 
 	_createClass(SlideShowPageComponent, [{
-		key: 'handleImageSlide',
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			if (this.props.page.images.length) {
+				this.setState({
+					currentTitle: this.props.page.images[0].originalAlt,
+					images: this.props.page.images
+				});
+			}
+		}
+
+		/**
+   * @param   nextProps
+   */
+	}, {
+		key: 'componentWillReceiveProps',
+		value: function componentWillReceiveProps(nextProps) {
+			if (this.props.page.urlSegment !== nextProps.page.urlSegment) {
+				this.setState({ images: nextProps.page.images });
+			}
+		}
 
 		/**
    * Handle when a new image slides into view.
    *
    * @param 	image
       */
+	}, {
+		key: 'handleImageSlide',
 		value: function handleImageSlide(image) {
 			this.setState({
 				currentTitle: this.props.page.images[image].originalAlt
 			});
+		}
+
+		/**
+   * Handle when the users clicks the image.
+   *
+   * @param 	image
+      */
+	}, {
+		key: 'handleImageClick',
+		value: function handleImageClick(image) {
+			this.imageGallery.fullScreen();
 		}
 
 		/**
@@ -714,6 +795,7 @@ var SlideShowPageComponent = (function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
+			var _this = this;
 
 			var galleryOptions = {
 				slideInterval: 5000,
@@ -728,14 +810,18 @@ var SlideShowPageComponent = (function (_React$Component) {
 				'article',
 				{ className: 'content-component content-component--slide-show-page' },
 				_react2['default'].createElement(_reactImageGallery2['default'], {
-					items: this.props.page.images,
+					ref: function (imageGallery) {
+						_this.imageGallery = imageGallery;
+					},
+					items: this.state.images,
 					slideInterval: galleryOptions.slideInterval,
 					lazyLoad: galleryOptions.lazyLoad,
 					showNav: galleryOptions.showNav,
 					showThumbnails: galleryOptions.showThumbnails,
 					slideDuration: galleryOptions.slideDuration,
 					autoPlay: galleryOptions.autoPlay,
-					onSlide: this.handleImageSlide.bind(this)
+					onSlide: this.handleImageSlide.bind(this),
+					onClick: this.handleImageClick.bind(this)
 				}),
 				_react2['default'].createElement(
 					'h1',
@@ -776,7 +862,7 @@ var _react2 = _interopRequireDefault(_react);
 /**
  * @author      Janne Klouman <janne@klouman.com>
  * @package     GregerElliotWebSite
- * @subpackage  a
+ * @subpackage  i18n
  */
 
 var LanguageSelectorComponent = (function (_React$Component) {
@@ -806,7 +892,28 @@ var LanguageSelectorComponent = (function (_React$Component) {
      * @return {XML}
      */
     value: function render() {
-      return _react2['default'].createElement('div', null);
+      var _this = this;
+
+      var displayLanguageSelectorItem = function displayLanguageSelectorItem(item) {
+
+        var activeClass = item.lang === _this.props.currentLanguage ? ' language-selector__item--focused' : '';
+
+        return _react2['default'].createElement(
+          'li',
+          {
+            key: item.lang,
+            className: 'language-selector__item' + activeClass,
+            onClick: _this.props.onLanguageChange.bind(_this, item.lang) },
+          item.name
+        );
+      };
+
+      return _react2['default'].createElement(
+        'ul',
+        { className: 'language-selector' },
+        this.props.languages ? this.props.languages.map(displayLanguageSelectorItem) : '',
+        _react2['default'].createElement('div', { className: 'cf' })
+      );
     }
   }]);
 
@@ -883,6 +990,8 @@ var NavigationComponent = (function (_React$Component) {
              */
             var displayMenuItem = function displayMenuItem(item) {
 
+                var activeClassName = 'menu-item--focused';
+
                 return _react2['default'].createElement(
                     'li',
                     { key: item.key },
@@ -890,7 +999,7 @@ var NavigationComponent = (function (_React$Component) {
                         _reactRouter.Link,
                         {
                             className: 'menu-item',
-                            activeClassName: 'menu-item--focused',
+                            activeClassName: activeClassName,
                             onlyActiveOnIndex: true,
                             to: '/' + item.urlSegment },
                         item.menuTitle
@@ -932,12 +1041,14 @@ var API_ENDPOINT_MENU = head.dataset.apiEndpointMenu;
 var API_ENDPOINT_LOGO = head.dataset.apiEndpointLogo;
 var API_ENDPOINT_LANGUAGE_SELECTOR = head.dataset.apiEndpointLanguageSelector;
 var API_ENDPOINT_CONTENT = head.dataset.apiEndpointContent;
+var API_ENDPOINT_TRANSLATE_URL_SEGMENT = head.dataset.apiEndpointTranslateUrlSegment;
 
 exports.API_BASE = API_BASE;
 exports.API_ENDPOINT_MENU = API_ENDPOINT_MENU;
 exports.API_ENDPOINT_LOGO = API_ENDPOINT_LOGO;
 exports.API_ENDPOINT_LANGUAGE_SELECTOR = API_ENDPOINT_LANGUAGE_SELECTOR;
 exports.API_ENDPOINT_CONTENT = API_ENDPOINT_CONTENT;
+exports.API_ENDPOINT_TRANSLATE_URL_SEGMENT = API_ENDPOINT_TRANSLATE_URL_SEGMENT;
 
 },{}],10:[function(require,module,exports){
 module.exports = require('./lib/axios');

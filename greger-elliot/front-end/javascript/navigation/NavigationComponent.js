@@ -1,7 +1,6 @@
-import React from 'react';
-import {
-	Link
-}		from 'react-router';
+import React 		from 'react';
+import { Link }		from 'react-router';
+
 /**
  * Navigation component responsible for rendering the menu and
  * handling interactions with it.
@@ -36,11 +35,13 @@ class NavigationComponent extends React.Component {
          */
         var displayMenuItem = (item) => {
 
+			let activeClassName = 'menu-item--focused';
+
             return (
                 <li key={ item.key }>
                         <Link
-							className='menu-item'
-							activeClassName='menu-item--focused'
+							className={'menu-item'}
+							activeClassName={activeClassName}
 							onlyActiveOnIndex={true}
 							to={ '/' + item.urlSegment } >{ item.menuTitle }</Link>
                 </li>

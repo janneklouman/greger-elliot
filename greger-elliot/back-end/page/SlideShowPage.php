@@ -48,9 +48,11 @@ class SlideShowPage extends Page implements JsonSerializable
             'menuTitle' 	=> $this->MenuTitle,
             'created'   	=> $this->Created,
             'pageID'    	=> $this->ID,
-			'urlSegment' 	=> 1 === $this->ID ? '' : $this->URLSegment,
+			'urlSegment' 	=>
+				Config::inst()->get('RootURLController', 'default_homepage_link') === $this->URLSegment ? '' : $this->URLSegment,
             'content'   	=> $this->Content,
             'className' 	=> $this->ClassName,
+			'language'		=> substr($this->Locale, 0, 2),
             'images'    	=> $this->imagesAsJson(),
             'key'       	=> 'page-' . $this->ID // used by react
         ];

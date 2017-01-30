@@ -15,11 +15,11 @@ class API extends \Controller {
      * @var     array
      */
     private static $allowed_actions = [
-        'index',
         'menu',
         'language_selector',
         'content',
-        'logo'
+        'logo',
+		'translate_url_segment'
     ];
 
     /**
@@ -33,7 +33,21 @@ class API extends \Controller {
         $this->getResponse()->setStatusCode(200);
         $this->getResponse()->addHeader('Content-Type', 'application/json');
 
-        $result = Helper::load_cache('GregerElliotMenuCache');
+		// Current url segment for menu.
+		$urlSegment = \Convert::raw2sql($request->param('ID'));
+		$lang 		= 'sv';
+
+		if ($urlSegment && 'undefined' !== $urlSegment) {
+			\Translatable::disable_locale_filter();
+			$page = \Page::get()->filter('URLSegment', $urlSegment)->first();
+			if ($page) {
+				$lang = $page->Locale;
+			}
+			\Translatable::enable_locale_filter();
+		}
+
+		// Attempt to load from cache.
+        $result = Helper::load_cache('GregerElliotMenuCache' . $lang);
 
         // The cache is empty, grab from database and save to cache.
         if (empty($result)) {
@@ -42,10 +56,7 @@ class API extends \Controller {
                 'ShowInMenus' => true
             ];
 
-            // Grab a specific page ID from the menu.
-            if($specificPageUrlSegment = \Convert::raw2sql($request->param('ID'))) {
-                $filter['URLSegment'] = $specificPageUrlSegment;
-            }
+			\Translatable::set_current_locale(\i18n::get_locale_from_lang($lang));
 
             // Fetch the result.
             $result = \Page::get()->filter($filter);
@@ -67,10 +78,20 @@ class API extends \Controller {
     {
 
         // Set response headers and status code.
-        $this->getResponse()->setStatusCode(200);
         $this->getResponse()->addHeader('Content-Type', 'application/json');
 
-        return json_encode(['sv_SE', 'en_US']);
+        return json_encode(
+			[
+				[
+					'lang' => 'sv',
+					'name' => 'Svenska'
+				],
+				[
+					'lang' => 'en',
+					'name' => 'English'
+				]
+			]
+		);
     }
 
     /**
@@ -81,7 +102,6 @@ class API extends \Controller {
     {
 
         // Set response headers and status code.
-        $this->getResponse()->setStatusCode(200);
         $this->getResponse()->addHeader('Content-Type', 'application/json');
 
         $filter = [
@@ -100,7 +120,9 @@ class API extends \Controller {
 		if (empty($result)) {
 
 			// Fetch the result.
+			\Translatable::disable_locale_filter();
 			$result = \Page::get()->filter($filter)->first();
+			\Translatable::enable_locale_filter();
 
 			// Encode the result.
 			$result = json_encode($result);
@@ -120,7 +142,6 @@ class API extends \Controller {
     public function logo(\SS_HTTPRequest $request)
     {
         // Set response headers and status code.
-        $this->getResponse()->setStatusCode(200);
         $this->getResponse()->addHeader('Content-Type', 'application/json');
 
         $result = Helper::load_cache('GregerElliotLogoCache', 'SiteConfig');
@@ -145,5 +166,49 @@ class API extends \Controller {
 
         return $result;
     }
+
+	/**
+	 * @param   \SS_HTTPRequest $request
+	 * @return  string
+	 */
+	public function translate_url_segment(\SS_HTTPRequest $request) {
+
+		// Set response headers and status code.
+		$this->getResponse()->addHeader('Content-Type', 'application/json');
+
+		$urlSegment = \Convert::raw2sql($request->param('ID'));
+
+		if ('undefined' === $urlSegment) {
+			$urlSegment = \Config::inst()->get('RootURLController', 'default_homepage_link');
+		}
+
+		$language 	= \Convert::raw2sql($request->param('OtherID'));
+
+		if ($language && $urlSegment && 'undefined' !== $urlSegment && 'undefined' !== $language) {
+
+			// Get the translated url segment.
+			\Translatable::disable_locale_filter();
+			$page = \Page::get()->filter(['URLSegment' => $urlSegment])->first();
+			$translatedPage = $page->getTranslation(\i18n::get_locale_from_lang($language));
+			$translatedPageURLSegment = $translatedPage->URLSegment;
+
+			// Check vs defautl homepage link.
+			if (\Config::inst()->get('RootURLController', 'default_homepage_link') === $translatedPageURLSegment) {
+				$translatedPageURLSegment = '';
+			}
+
+			\Translatable::enable_locale_filter();
+
+			if ($translatedPage) {
+				return json_encode(
+					[
+						'translatedUrlSegment' => $translatedPageURLSegment
+					]
+				);
+			}
+		}
+
+		return '';
+	}
 
 }

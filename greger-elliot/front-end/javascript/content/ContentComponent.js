@@ -40,21 +40,7 @@ class ContentComponent extends React.Component {
 	 */
 	componentDidMount() {
 
-		// Get content data from the back end based on current page id.
-		let request = axios.get(API_ENDPOINT_CONTENT + this.props.urlSegment)
-			.then((result) => {
-
-				// Update state.
-				this.setState({
-					currentPage: result.data
-				});
-
-				// Save to cached requests.
-				this.finishedApiRequests[result.data.urlSegment] = result.data;
-			});
-
-		// Save to array of ongoing server requests.
-		this.ongoingApiRequests.push(request);
+		this.loadContent(this.props.urlSegment);
 
 	}
 
@@ -64,9 +50,11 @@ class ContentComponent extends React.Component {
 	 * @param   nextProps
 	 */
 	componentWillReceiveProps(nextProps) {
+		
 		if (this.props.urlSegment !== nextProps.urlSegment) {
 			this.loadContent(nextProps.urlSegment);
 		}
+		
 	}
 
 	/**
@@ -84,6 +72,8 @@ class ContentComponent extends React.Component {
 				currentPage: this.finishedApiRequests[urlSegment]
 			});
 
+			document.title = this.state.currentPage.title + ' - Greger Elliot';
+
 		}
 
 		// Use API if not in local cache.
@@ -97,6 +87,8 @@ class ContentComponent extends React.Component {
 					this.setState({
 						currentPage: result.data
 					});
+
+					document.title = this.state.currentPage.title + ' - Greger Elliot';
 
 					// Save to cached requests.
 					this.finishedApiRequests[urlSegment] = result.data;

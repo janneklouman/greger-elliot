@@ -4,6 +4,10 @@
 	box-sizing: border-box;
 }
 
+.cf {
+	clear: both;
+}
+
 @import 'image-gallery';
 @import 'variables';
 @import 'mixins';

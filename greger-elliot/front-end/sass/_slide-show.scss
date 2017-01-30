@@ -12,7 +12,7 @@
 .image-gallery-image img {
 
 	max-width: 100%;
-	max-height: calc(100vh - #{($padding-section * 2)} - #{$height-slideshow-description});
+	max-height: calc(100vh - #{($padding-section * 2)} - #{$height-slideshow-description} - #{$height-language-bar});
 	height: auto;
 	width: auto;
 
@@ -24,6 +24,8 @@
 	line-height: $height-slideshow-description;
 	white-space: nowrap;
 	font-size: $font-size-slideshow-description;
+	font-family: $font-family-gallery-description;
+	font-weight: 500;
 	margin: 0;
 	text-align: center;
 

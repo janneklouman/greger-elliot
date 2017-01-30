@@ -25,6 +25,7 @@ class Page extends SiteTree implements JsonSerializable
             'pageID'    	=> $this->ID,
             'content'   	=> $this->Content,
             'className' 	=> $this->ClassName,
+			'language'		=> substr($this->Locale, 0, 2),
             'key'       	=> 'page-' . $this->ID // used by react
         ];
 

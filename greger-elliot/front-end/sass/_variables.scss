@@ -7,11 +7,23 @@
 // Colors
 $color-white: white;
 $color-gray-text: #232326;
-$color-gray-navigation: #282e40;
+$color-navigation: #282e40;
+
+// Font families
+$font-family-lora: 'loraregular', serif;
+$font-family-roboto-medium: 'roboto-medium', sans-serif;
+$font-family-roboto-black: 'roboto-black', sans-serif;
+
+$font-family-language-selector: $font-family-roboto-medium;
+$font-family-gallery-description: $font-family-roboto-medium;
+$font-family-menu: $font-family-roboto-black;
+$font-family-paragraph: $font-family-lora;
+$font-family-heading: $font-family-lora;
 
 // Sizes
 $font-size-h1: 2rem;
-$font-size-slideshow-description: 24px;
+$font-size-slideshow-description: 1rem;
+$font-size-navigation: 1.75rem;
 $font-size-p: 1rem;
 
 $width-section-first: 420px;
@@ -21,9 +33,10 @@ $width-section-first-tablet: 320px;
 $width-tablet: 768px;
 $width-desktop: 1024px;
 
-$padding-section: 20px;
+$padding-section: 10px;
 
 $margin-bottom-h1: 1.5rem;
 
 $height-slideshow-controls: 0;
-$height-slideshow-description: 72px;
+$height-slideshow-description: 48px;
+$height-language-bar: 40px;

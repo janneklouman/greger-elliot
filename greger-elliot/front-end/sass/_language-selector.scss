@@ -3,3 +3,23 @@
 ///  Janne Klouman <janne@klouman.com>  ////
 //                                     /////
 
+.language-selector {
+
+	list-style-type: none;
+
+	&__item {
+		display: inline-block;
+		cursor: pointer;
+		font-family: $font-family-language-selector;
+		font-size: $font-size-slideshow-description;
+		color: $color-navigation;
+		margin-left: 1rem;
+		float: right;
+		padding-bottom: $padding-section;
+
+		&--focused {
+			color: DARKORANGE;
+		}
+	}
+
+}
