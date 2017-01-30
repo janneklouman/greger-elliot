@@ -119,6 +119,7 @@ var GregerApp = (function (_React$Component) {
 
     // Initial state.
     this.state = {
+      hasMounted: false,
       urlSegment: '',
       logo: {},
       menuItems: [],
@@ -150,94 +151,10 @@ var GregerApp = (function (_React$Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
 
-      this.setState({ urlSegment: this.props.params.urlSegment });
-      this.loadMenu(this.state.urlSegment);
-      this.loadLogo();
-      this.loadLanguageSelector();
-    }
-
-    /**
-     * Sends a request to the back end for the menu and updates
-     * state.
-    *
-    * @param	urlSegment	Current url segment.
-     */
-  }, {
-    key: 'loadMenu',
-    value: function loadMenu(urlSegment) {
-      var _this = this;
-
-      // Load from cache if possible.
-      if (urlSegment in this.finishedApiRequests.menu) {
-
-        // Update state.
-        this.setState({
-          menuItems: this.finishedApiRequests.menu[urlSegment]
-        });
-      }
-
-      // Use API if not in local cache.
-      if (!(urlSegment in this.finishedApiRequests.menu)) {
-
-        // Get menu data from the back end.
-        var request = _axios2['default'].get(_yellowPages.API_ENDPOINT_MENU + urlSegment).then(function (result) {
-
-          // Update state.
-          _this.setState({
-            menuItems: result.data
-          });
-
-          // Save to cached requests.
-          _this.finishedApiRequests.menu[urlSegment] = result.data;
-        });
-
-        // Save to array of ongoing server requests.
-        this.ongoingApiRequests.push(request);
-      }
-    }
-
-    /**
-     * Sends a request to the back end for the logo and updates
-     * state.
-     */
-  }, {
-    key: 'loadLogo',
-    value: function loadLogo() {
-      var _this2 = this;
-
-      // Get logo data from the back end.
-      var request = _axios2['default'].get(_yellowPages.API_ENDPOINT_LOGO).then(function (result) {
-
-        // Update state.
-        _this2.setState({
-          logo: result.data
-        });
+      this.setState({
+        urlSegment: this.props.params.urlSegment,
+        hasMounted: true
       });
-
-      // Save to array of ongoing server requests.
-      this.ongoingApiRequests.push(request);
-    }
-
-    /**
-     * Sends a request to the back end for the available languages
-     * and updates state.
-     */
-  }, {
-    key: 'loadLanguageSelector',
-    value: function loadLanguageSelector() {
-      var _this3 = this;
-
-      // Get language selector data from the back end.
-      var request = _axios2['default'].get(_yellowPages.API_ENDPOINT_LANGUAGE_SELECTOR).then(function (result) {
-
-        // Update state.
-        _this3.setState({
-          languages: result.data
-        });
-      });
-
-      // Save to array of ongoing server requests.
-      this.ongoingApiRequests.push(request);
     }
 
     /**
@@ -248,7 +165,7 @@ var GregerApp = (function (_React$Component) {
   }, {
     key: 'switchLanguage',
     value: function switchLanguage(language) {
-      var _this4 = this;
+      var _this = this;
 
       this.setState({ language: language });
 
@@ -256,15 +173,12 @@ var GregerApp = (function (_React$Component) {
       var request = _axios2['default'].get(_yellowPages.API_ENDPOINT_TRANSLATE_URL_SEGMENT + this.state.urlSegment + '/' + language).then(function (result) {
 
         // Update state.
-        _this4.setState({
+        _this.setState({
           urlSegment: result.data.translatedUrlSegment
         });
 
-        // Update menu.
-        _this4.loadMenu(result.data.translatedUrlSegment);
-
         // Update browser URL and history.
-        _this4.props.router.push('/' + result.data.translatedUrlSegment);
+        _this.props.router.push('/' + result.data.translatedUrlSegment);
       });
 
       // Save to array of ongoing server requests.
@@ -292,25 +206,22 @@ var GregerApp = (function (_React$Component) {
     key: 'render',
     value: function render() {
 
-      return _react2['default'].createElement(
+      return this.state.hasMounted ? _react2['default'].createElement(
         'div',
         null,
         _react2['default'].createElement(
           'section',
           { className: 'first' },
           _react2['default'].createElement(_contentLogoComponent2['default'], { logo: this.state.logo }),
-          _react2['default'].createElement(_navigationNavigationComponent2['default'], { menuItems: this.state.menuItems })
+          _react2['default'].createElement(_navigationNavigationComponent2['default'], { urlSegment: this.state.urlSegment })
         ),
         _react2['default'].createElement(
           'section',
           { className: 'second' },
-          _react2['default'].createElement(_navigationLanguageSelectorComponent2['default'], {
-            languages: this.state.languages,
-            onLanguageChange: this.handleOnLanguageSelectorClick.bind(this),
-            currentLanguage: this.state.language }),
+          _react2['default'].createElement(_navigationLanguageSelectorComponent2['default'], { urlSegment: this.state.urlSegment, onLanguageChange: this.handleOnLanguageSelectorClick.bind(this) }),
           _react2['default'].createElement(_contentContentComponent2['default'], { urlSegment: this.state.urlSegment, locale: this.state.locale })
         )
-      );
+      ) : null;
     }
 
     /**
@@ -550,7 +461,7 @@ module.exports = exports['default'];
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
-    value: true
+	value: true
 });
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -563,9 +474,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var _axios = require('axios');
+
+var _axios2 = _interopRequireDefault(_axios);
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _yellowPages = require('../yellow-pages');
 
 /**
  * @author      Janne Klouman <janne@klouman.com>
@@ -574,46 +491,119 @@ var _react2 = _interopRequireDefault(_react);
  */
 
 var LogoComponent = (function (_React$Component) {
-    _inherits(LogoComponent, _React$Component);
+	_inherits(LogoComponent, _React$Component);
 
-    /**
-     * LogoComponent constructor.
-     *
-     * @param props
-     * @param context
-     */
+	/**
+  * LogoComponent constructor.
+  *
+  * @param props
+  * @param context
+  */
 
-    function LogoComponent(props, context) {
-        _classCallCheck(this, LogoComponent);
+	function LogoComponent(props, context) {
+		_classCallCheck(this, LogoComponent);
 
-        _get(Object.getPrototypeOf(LogoComponent.prototype), 'constructor', this).call(this, props, context);
-    }
+		_get(Object.getPrototypeOf(LogoComponent.prototype), 'constructor', this).call(this, props, context);
 
-    // Export LogoComponent.
+		// Save API requests here for easy tearing down.
+		this.ongoingApiRequests = [];
 
-    _createClass(LogoComponent, [{
-        key: 'render',
+		// Initial state.
+		this.state = {
+			logo: {}
+		};
+	}
 
-        /**
-         * Render LogoComponent.
-         *
-         * @return {XML}
-         */
-        value: function render() {
+	// Export LogoComponent.
 
-            var classes = ['logo'];
+	_createClass(LogoComponent, [{
+		key: 'componentDidMount',
 
-            return _react2['default'].createElement('img', { className: classes.join(' '), src: this.props.logo.href });
-        }
-    }]);
+		/**
+   * Initial setup.
+   */
+		value: function componentDidMount() {
 
-    return LogoComponent;
+			this.loadLogo();
+		}
+
+		/**
+   * Sends a request to the back end for the logo and updates
+   * state.
+   */
+	}, {
+		key: 'loadLogo',
+		value: function loadLogo() {
+			var _this = this;
+
+			// Get logo data from the back end.
+			var request = _axios2['default'].get(_yellowPages.API_ENDPOINT_LOGO).then(function (result) {
+
+				// Update state.
+				_this.setState({
+					logo: result.data
+				});
+			});
+
+			// Save to array of ongoing server requests.
+			this.ongoingApiRequests.push(request);
+		}
+
+		/**
+   * Render LogoComponent.
+   *
+   * @return {XML}
+   */
+	}, {
+		key: 'render',
+		value: function render() {
+
+			var classes = ['logo'];
+
+			return _react2['default'].createElement('img', { className: classes.join(' '), src: this.state.logo.href });
+		}
+
+		/**
+   * Abort any active server request on unmount.
+   */
+	}, {
+		key: 'componentWillUnmount',
+		value: function componentWillUnmount() {
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
+
+			try {
+
+				for (var _iterator = this.ongoingApiRequests[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var request = _step.value;
+
+					request.abort();
+				}
+			} catch (err) {
+				_didIteratorError = true;
+				_iteratorError = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion && _iterator['return']) {
+						_iterator['return']();
+					}
+				} finally {
+					if (_didIteratorError) {
+						throw _iteratorError;
+					}
+				}
+			}
+		}
+	}]);
+
+	return LogoComponent;
 })(_react2['default'].Component);
 
 exports['default'] = LogoComponent;
 module.exports = exports['default'];
 
-},{"react":267}],5:[function(require,module,exports){
+},{"../yellow-pages":9,"axios":10,"react":267}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -743,6 +733,10 @@ var SlideShowPageComponent = (function (_React$Component) {
 
 	_createClass(SlideShowPageComponent, [{
 		key: 'componentDidMount',
+
+		/**
+   * Mount component.
+   */
 		value: function componentDidMount() {
 			if (this.props.page.images.length) {
 				this.setState({
@@ -759,7 +753,10 @@ var SlideShowPageComponent = (function (_React$Component) {
 		key: 'componentWillReceiveProps',
 		value: function componentWillReceiveProps(nextProps) {
 			if (this.props.page.urlSegment !== nextProps.page.urlSegment) {
+
+				var idx = this.imageGallery.getCurrentIndex();
 				this.setState({ images: nextProps.page.images });
+				this.imageGallery.slideToIndex(idx == 0 ? idx : idx - 1);
 			}
 		}
 
@@ -809,7 +806,7 @@ var SlideShowPageComponent = (function (_React$Component) {
 			return _react2['default'].createElement(
 				'article',
 				{ className: 'content-component content-component--slide-show-page' },
-				_react2['default'].createElement(_reactImageGallery2['default'], {
+				this.state.images.length ? _react2['default'].createElement(_reactImageGallery2['default'], {
 					ref: function (imageGallery) {
 						_this.imageGallery = imageGallery;
 					},
@@ -822,13 +819,24 @@ var SlideShowPageComponent = (function (_React$Component) {
 					autoPlay: galleryOptions.autoPlay,
 					onSlide: this.handleImageSlide.bind(this),
 					onClick: this.handleImageClick.bind(this)
-				}),
+				}) : '',
 				_react2['default'].createElement(
 					'h1',
 					{ className: 'slide-show-description' },
 					this.state.currentTitle
 				)
 			);
+		}
+
+		/**
+   * Abort any active server request on unmount.
+   */
+	}, {
+		key: 'componentWillUnmount',
+		value: function componentWillUnmount() {
+			this.setState({
+				images: []
+			});
 		}
 	}]);
 
@@ -842,7 +850,7 @@ module.exports = exports['default'];
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
-  value: true
+	value: true
 });
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -855,9 +863,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var _axios = require('axios');
+
+var _axios2 = _interopRequireDefault(_axios);
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _yellowPages = require('../yellow-pages');
 
 /**
  * @author      Janne Klouman <janne@klouman.com>
@@ -866,68 +880,175 @@ var _react2 = _interopRequireDefault(_react);
  */
 
 var LanguageSelectorComponent = (function (_React$Component) {
-  _inherits(LanguageSelectorComponent, _React$Component);
+	_inherits(LanguageSelectorComponent, _React$Component);
 
-  /**
-   * LanguageSelectorComponent constructor.
-   *
-   * @param   props
-   * @param   context
+	/**
+  * LanguageSelectorComponent constructor.
+  *
+  * @param   props
+  * @param   context
+  */
+
+	function LanguageSelectorComponent(props, context) {
+		_classCallCheck(this, LanguageSelectorComponent);
+
+		_get(Object.getPrototypeOf(LanguageSelectorComponent.prototype), 'constructor', this).call(this, props, context);
+
+		// Save API requests here for easy tearing down.
+		this.ongoingApiRequests = [];
+
+		// Cache all finished API requests.
+		this.finishedApiRequests = [];
+
+		// Initial state.
+		this.state = {
+			languages: []
+		};
+	}
+
+	// Export LanguageSelectorComponent.
+
+	_createClass(LanguageSelectorComponent, [{
+		key: 'componentDidMount',
+
+		/**
+   * Initial setup.
    */
+		value: function componentDidMount() {
 
-  function LanguageSelectorComponent(props, context) {
-    _classCallCheck(this, LanguageSelectorComponent);
+			this.loadLanguages(this.props.urlSegment);
+		}
 
-    _get(Object.getPrototypeOf(LanguageSelectorComponent.prototype), 'constructor', this).call(this, props, context);
-  }
+		/**
+   * Wait for props to be passed from API.
+   *
+   * @param   nextProps
+   */
+	}, {
+		key: 'componentWillReceiveProps',
+		value: function componentWillReceiveProps(nextProps) {
 
-  // Export LanguageSelectorComponent.
+			if (this.props.urlSegment !== nextProps.urlSegment) {
+				this.loadLanguages(nextProps.urlSegment);
+			}
+		}
 
-  _createClass(LanguageSelectorComponent, [{
-    key: 'render',
+		/**
+   * Sends a request to the back end to populate component.
+   *
+   * @param	urlSegment	Current url segment.
+   */
+	}, {
+		key: 'loadLanguages',
+		value: function loadLanguages(urlSegment) {
+			var _this = this;
 
-    /**
-     * Render LanguageSelectorComponent.
-     *
-     * @return {XML}
-     */
-    value: function render() {
-      var _this = this;
+			// Load from cache if possible.
+			if (urlSegment in this.finishedApiRequests) {
 
-      var displayLanguageSelectorItem = function displayLanguageSelectorItem(item) {
+				// Update state.
+				this.setState({
+					languages: this.finishedApiRequests[urlSegment]
+				});
+			}
 
-        var activeClass = item.lang === _this.props.currentLanguage ? ' language-selector__item--focused' : '';
+			// Use API if not in local cache.
+			if (!(urlSegment in this.finishedApiRequests)) {
 
-        return _react2['default'].createElement(
-          'li',
-          {
-            key: item.lang,
-            className: 'language-selector__item' + activeClass,
-            onClick: _this.props.onLanguageChange.bind(_this, item.lang) },
-          item.name
-        );
-      };
+				// Get menu data from the back end.
+				var request = _axios2['default'].get(_yellowPages.API_ENDPOINT_LANGUAGE_SELECTOR + urlSegment).then(function (result) {
 
-      return _react2['default'].createElement(
-        'ul',
-        { className: 'language-selector' },
-        this.props.languages ? this.props.languages.map(displayLanguageSelectorItem) : '',
-        _react2['default'].createElement('div', { className: 'cf' })
-      );
-    }
-  }]);
+					// Update state.
+					_this.setState({
+						languages: result.data
+					});
 
-  return LanguageSelectorComponent;
+					// Save to cached requests.
+					_this.finishedApiRequests[urlSegment] = result.data;
+				});
+
+				// Save to array of ongoing server requests.
+				this.ongoingApiRequests.push(request);
+			}
+		}
+
+		/**
+   * Render LanguageSelectorComponent.
+   *
+   * @return {XML}
+   */
+	}, {
+		key: 'render',
+		value: function render() {
+			var _this2 = this;
+
+			var displayLanguageSelectorItem = function displayLanguageSelectorItem(item) {
+
+				var activeClass = item.isCurrent ? ' language-selector__item--focused' : '';
+
+				return _react2['default'].createElement(
+					'li',
+					{
+						key: item.lang,
+						className: 'language-selector__item' + activeClass,
+						onClick: _this2.props.onLanguageChange.bind(_this2, item.lang) },
+					item.name
+				);
+			};
+
+			return _react2['default'].createElement(
+				'ul',
+				{ className: 'language-selector' },
+				this.state.languages.length ? this.state.languages.map(displayLanguageSelectorItem) : '',
+				_react2['default'].createElement('div', { className: 'cf' })
+			);
+		}
+
+		/**
+   * Abort any active server request on unmount.
+   */
+	}, {
+		key: 'componentWillUnmount',
+		value: function componentWillUnmount() {
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
+
+			try {
+
+				for (var _iterator = this.ongoingApiRequests[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var request = _step.value;
+
+					request.abort();
+				}
+			} catch (err) {
+				_didIteratorError = true;
+				_iteratorError = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion && _iterator['return']) {
+						_iterator['return']();
+					}
+				} finally {
+					if (_didIteratorError) {
+						throw _iteratorError;
+					}
+				}
+			}
+		}
+	}]);
+
+	return LanguageSelectorComponent;
 })(_react2['default'].Component);
 
 exports['default'] = LanguageSelectorComponent;
 module.exports = exports['default'];
 
-},{"react":267}],8:[function(require,module,exports){
+},{"../yellow-pages":9,"axios":10,"react":267}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
-    value: true
+	value: true
 });
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -940,11 +1061,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var _axios = require('axios');
+
+var _axios2 = _interopRequireDefault(_axios);
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
 var _reactRouter = require('react-router');
+
+var _yellowPages = require('../yellow-pages');
 
 /**
  * Navigation component responsible for rendering the menu and
@@ -955,73 +1082,181 @@ var _reactRouter = require('react-router');
  */
 
 var NavigationComponent = (function (_React$Component) {
-    _inherits(NavigationComponent, _React$Component);
+	_inherits(NavigationComponent, _React$Component);
 
-    /**
-     * NavigationComponent constructor.
-     *
-     * @param   props
-     * @param   context
-     */
+	/**
+  * NavigationComponent constructor.
+  *
+  * @param   props
+  * @param   context
+  */
 
-    function NavigationComponent(props, context) {
-        _classCallCheck(this, NavigationComponent);
+	function NavigationComponent(props, context) {
+		_classCallCheck(this, NavigationComponent);
 
-        _get(Object.getPrototypeOf(NavigationComponent.prototype), 'constructor', this).call(this, props, context);
-    }
+		_get(Object.getPrototypeOf(NavigationComponent.prototype), 'constructor', this).call(this, props, context);
 
-    // Render NavigationComponent.
+		// Save API requests here for easy tearing down.
+		this.ongoingApiRequests = [];
 
-    _createClass(NavigationComponent, [{
-        key: 'render',
+		// Cache all finished API requests.
+		this.finishedApiRequests = [];
 
-        /**
-         * Render NavigationComponent.
-         *
-         * @returns {XML}
-         */
-        value: function render() {
+		// Initial state.
+		this.state = {
+			menuItems: []
+		};
+	}
 
-            /**
-             * The HTML of a single menu item.
-             *
-             * @param   item    Page object.
-             * @returns {XML}
-             */
-            var displayMenuItem = function displayMenuItem(item) {
+	// Render NavigationComponent.
 
-                var activeClassName = 'menu-item--focused';
+	_createClass(NavigationComponent, [{
+		key: 'componentDidMount',
 
-                return _react2['default'].createElement(
-                    'li',
-                    { key: item.key },
-                    _react2['default'].createElement(
-                        _reactRouter.Link,
-                        {
-                            className: 'menu-item',
-                            activeClassName: activeClassName,
-                            onlyActiveOnIndex: true,
-                            to: '/' + item.urlSegment },
-                        item.menuTitle
-                    )
-                );
-            };
+		/**
+   * Initial setup.
+   */
+		value: function componentDidMount() {
 
-            return _react2['default'].createElement(
-                'ul',
-                { className: 'menu' },
-                this.props.menuItems ? this.props.menuItems.map(displayMenuItem) : ''
-            );
-        }
-    }]);
+			this.loadMenu(this.props.urlSegment);
+		}
 
-    return NavigationComponent;
+		/**
+   * Wait for props to be passed from API.
+   *
+   * @param   nextProps
+   */
+	}, {
+		key: 'componentWillReceiveProps',
+		value: function componentWillReceiveProps(nextProps) {
+
+			if (this.props.urlSegment !== nextProps.urlSegment) {
+				this.loadMenu(nextProps.urlSegment);
+			}
+		}
+
+		/**
+   * Sends a request to the back end for the menu and updates
+   * state.
+   *
+   * @param	urlSegment	Current url segment.
+   */
+	}, {
+		key: 'loadMenu',
+		value: function loadMenu(urlSegment) {
+			var _this = this;
+
+			// Load from cache if possible.
+			if (urlSegment in this.finishedApiRequests) {
+
+				// Update state.
+				this.setState({
+					menuItems: this.finishedApiRequests[urlSegment]
+				});
+			}
+
+			// Use API if not in local cache.
+			if (!(urlSegment in this.finishedApiRequests)) {
+
+				// Get menu data from the back end.
+				var request = _axios2['default'].get(_yellowPages.API_ENDPOINT_MENU + urlSegment).then(function (result) {
+
+					// Update state.
+					_this.setState({
+						menuItems: result.data
+					});
+
+					// Save to cached requests.
+					_this.finishedApiRequests[urlSegment] = result.data;
+				});
+
+				// Save to array of ongoing server requests.
+				this.ongoingApiRequests.push(request);
+			}
+		}
+
+		/**
+   * Render NavigationComponent.
+   *
+   * @returns {XML}
+   */
+	}, {
+		key: 'render',
+		value: function render() {
+
+			/**
+    * The HTML of a single menu item.
+    *
+    * @param   item    Page object.
+    * @returns {XML}
+    */
+			var displayMenuItem = function displayMenuItem(item) {
+
+				var activeClassName = 'menu-item--focused';
+
+				return _react2['default'].createElement(
+					'li',
+					{ key: item.key },
+					_react2['default'].createElement(
+						_reactRouter.Link,
+						{
+							className: 'menu-item',
+							activeClassName: activeClassName,
+							onlyActiveOnIndex: true,
+							to: '/' + item.urlSegment },
+						item.menuTitle
+					)
+				);
+			};
+
+			return _react2['default'].createElement(
+				'ul',
+				{ className: 'menu' },
+				this.state.menuItems.map(displayMenuItem)
+			);
+		}
+
+		/**
+   * Abort any active server request on unmount.
+   */
+	}, {
+		key: 'componentWillUnmount',
+		value: function componentWillUnmount() {
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
+
+			try {
+
+				for (var _iterator = this.ongoingApiRequests[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var request = _step.value;
+
+					request.abort();
+				}
+			} catch (err) {
+				_didIteratorError = true;
+				_iteratorError = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion && _iterator['return']) {
+						_iterator['return']();
+					}
+				} finally {
+					if (_didIteratorError) {
+						throw _iteratorError;
+					}
+				}
+			}
+		}
+	}]);
+
+	return NavigationComponent;
 })(_react2['default'].Component);
 
 exports['default'] = NavigationComponent;
 module.exports = exports['default'];
 
-},{"react":267,"react-router":235}],9:[function(require,module,exports){
+},{"../yellow-pages":9,"axios":10,"react":267,"react-router":235}],9:[function(require,module,exports){
 /**
  * API paths for GregerElliotWebsite.
  *

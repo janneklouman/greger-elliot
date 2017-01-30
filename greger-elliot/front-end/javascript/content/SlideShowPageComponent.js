@@ -24,6 +24,9 @@ class SlideShowPageComponent extends React.Component {
 		};
     };
 
+	/**
+	 * Mount component.
+	 */
 	componentDidMount() {
 		if (this.props.page.images.length) {
 			this.setState(
@@ -40,7 +43,11 @@ class SlideShowPageComponent extends React.Component {
 	 */
 	componentWillReceiveProps(nextProps) {
 		if (this.props.page.urlSegment !== nextProps.page.urlSegment) {
+
+			let idx = this.imageGallery.getCurrentIndex();
 			this.setState({ images: nextProps.page.images });
+			this.imageGallery.slideToIndex(idx == 0 ? idx : idx - 1);
+
 		}
 	}
 
@@ -82,22 +89,36 @@ class SlideShowPageComponent extends React.Component {
 
         return (
             <article className="content-component content-component--slide-show-page">
-				<ImageGallery
-					ref={(imageGallery) => { this.imageGallery = imageGallery; }}
-					items={this.state.images}
-					slideInterval={galleryOptions.slideInterval}
-					lazyLoad={galleryOptions.lazyLoad}
-					showNav={galleryOptions.showNav}
-					showThumbnails={galleryOptions.showThumbnails}
-					slideDuration={galleryOptions.slideDuration}
-					autoPlay={galleryOptions.autoPlay}
-					onSlide={this.handleImageSlide.bind(this)}
-					onClick={this.handleImageClick.bind(this)}
-				/>
+				{
+					this.state.images.length ?
+						<ImageGallery
+							ref={(imageGallery) => { this.imageGallery = imageGallery; }}
+							items={this.state.images}
+							slideInterval={galleryOptions.slideInterval}
+							lazyLoad={galleryOptions.lazyLoad}
+							showNav={galleryOptions.showNav}
+							showThumbnails={galleryOptions.showThumbnails}
+							slideDuration={galleryOptions.slideDuration}
+							autoPlay={galleryOptions.autoPlay}
+							onSlide={this.handleImageSlide.bind(this)}
+							onClick={this.handleImageClick.bind(this)}
+						/>
+						: ''
+				}
+
 				<h1 className="slide-show-description">{this.state.currentTitle}</h1>
             </article>
         );
     }
+
+	/**
+	 * Abort any active server request on unmount.
+	 */
+	componentWillUnmount() {
+		this.setState({
+			images: []
+		});
+	}
 
 }
 

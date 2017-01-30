@@ -5,9 +5,6 @@ import LanguageSelectorComponent 	from './navigation/LanguageSelectorComponent';
 import ContentComponent            	from './content/ContentComponent';
 import LogoComponent            	from './content/LogoComponent';
 import {
-    API_ENDPOINT_MENU,
-    API_ENDPOINT_LOGO,
-    API_ENDPOINT_LANGUAGE_SELECTOR,
 	API_ENDPOINT_TRANSLATE_URL_SEGMENT
 } from './yellow-pages';
 
@@ -42,6 +39,7 @@ class GregerApp extends React.Component {
 
         // Initial state.
         this.state = {
+			hasMounted: 	false,
             urlSegment:     '',
             logo:           {},
             menuItems:      [],
@@ -67,95 +65,12 @@ class GregerApp extends React.Component {
      */
     componentDidMount() {
 
-		this.setState({ urlSegment: this.props.params.urlSegment });
-        this.loadMenu(this.state.urlSegment);
-        this.loadLogo();
-        this.loadLanguageSelector();
-
-    }
-
-    /**
-     * Sends a request to the back end for the menu and updates
-     * state.
-	 *
-	 * @param	urlSegment	Current url segment.
-     */
-    loadMenu(urlSegment) {
-
-		// Load from cache if possible.
-		if (urlSegment in this.finishedApiRequests.menu) {
-
-			// Update state.
-			this.setState({
-				menuItems: this.finishedApiRequests.menu[urlSegment]
-			});
-
-		}
-
-		// Use API if not in local cache.
-		if (!(urlSegment in this.finishedApiRequests.menu)) {
-
-			// Get menu data from the back end.
-			let request = axios.get(API_ENDPOINT_MENU + urlSegment)
-				.then( ( result ) => {
-
-					// Update state.
-					this.setState( {
-						menuItems: result.data
-					} );
-
-					// Save to cached requests.
-					this.finishedApiRequests.menu[urlSegment] = result.data;
-				} );
-
-			// Save to array of ongoing server requests.
-			this.ongoingApiRequests.push( request )
-
-		}
-
-    }
-
-    /**
-     * Sends a request to the back end for the logo and updates
-     * state.
-     */
-    loadLogo() {
-
-        // Get logo data from the back end.
-        let request = axios.get(API_ENDPOINT_LOGO)
-            .then((result) => {
-
-				// Update state.
-                this.setState({
-                    logo: result.data
-                });
-
-            });
-
-        // Save to array of ongoing server requests.
-        this.ongoingApiRequests.push(request)
-
-    }
-
-    /**
-     * Sends a request to the back end for the available languages
-     * and updates state.
-     */
-    loadLanguageSelector() {
-
-        // Get language selector data from the back end.
-        let request = axios.get(API_ENDPOINT_LANGUAGE_SELECTOR)
-                .then((result) => {
-
-					// Update state.
-                    this.setState({
-                        languages: result.data
-                    });
-
-                });
-
-        // Save to array of ongoing server requests.
-        this.ongoingApiRequests.push(request)
+		this.setState(
+			{
+				urlSegment: this.props.params.urlSegment,
+				hasMounted: true
+			}
+		);
 
     }
 
@@ -177,11 +92,9 @@ class GregerApp extends React.Component {
 					urlSegment: result.data.translatedUrlSegment
 				} );
 
-				// Update menu.
-				this.loadMenu(result.data.translatedUrlSegment);
-
 				// Update browser URL and history.
 				this.props.router.push( '/' + result.data.translatedUrlSegment );
+
 			} );
 
 		// Save to array of ongoing server requests.
@@ -207,21 +120,18 @@ class GregerApp extends React.Component {
      */
     render() {
 
-        return (
+        return this.state.hasMounted ? (
             <div>
                 <section className="first">
                     <LogoComponent logo={this.state.logo} />
-					<NavigationComponent menuItems={this.state.menuItems} />
+					<NavigationComponent urlSegment={this.state.urlSegment} />
                 </section>
                 <section className="second">
-					<LanguageSelectorComponent
-						languages={this.state.languages}
-						onLanguageChange={this.handleOnLanguageSelectorClick.bind(this)}
-						currentLanguage={this.state.language} />
+					<LanguageSelectorComponent urlSegment={this.state.urlSegment} onLanguageChange={this.handleOnLanguageSelectorClick.bind(this)} />
 					<ContentComponent urlSegment={this.state.urlSegment} locale={this.state.locale} />
                 </section>
             </div>
-        );
+			) : null;
 
     }
 

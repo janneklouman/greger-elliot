@@ -1,5 +1,9 @@
+import axios 		from 'axios';
 import React 		from 'react';
 import { Link }		from 'react-router';
+import {
+	API_ENDPOINT_MENU
+} from '../yellow-pages';
 
 /**
  * Navigation component responsible for rendering the menu and
@@ -18,7 +22,84 @@ class NavigationComponent extends React.Component {
      */
     constructor(props, context) {
         super(props, context);
+
+		// Save API requests here for easy tearing down.
+		this.ongoingApiRequests = [];
+
+		// Cache all finished API requests.
+		this.finishedApiRequests = [];
+
+		// Initial state.
+		this.state = {
+			menuItems: []
+		};
+
     };
+
+	/**
+	 * Initial setup.
+	 */
+	componentDidMount() {
+
+		this.loadMenu(this.props.urlSegment);
+
+	}
+
+	/**
+	 * Wait for props to be passed from API.
+	 *
+	 * @param   nextProps
+	 */
+	componentWillReceiveProps(nextProps) {
+
+		if (this.props.urlSegment !== nextProps.urlSegment) {
+			this.loadMenu(nextProps.urlSegment);
+		}
+
+	}
+
+
+	/**
+	 * Sends a request to the back end for the menu and updates
+	 * state.
+	 *
+	 * @param	urlSegment	Current url segment.
+	 */
+	loadMenu(urlSegment) {
+
+		// Load from cache if possible.
+		if (urlSegment in this.finishedApiRequests) {
+
+			// Update state.
+			this.setState({
+				menuItems: this.finishedApiRequests[urlSegment]
+			});
+
+		}
+
+		// Use API if not in local cache.
+		if (!(urlSegment in this.finishedApiRequests)) {
+
+			// Get menu data from the back end.
+			let request = axios.get(API_ENDPOINT_MENU + urlSegment)
+				.then( ( result ) => {
+
+					// Update state.
+					this.setState( {
+						menuItems: result.data
+					} );
+
+					// Save to cached requests.
+					this.finishedApiRequests[urlSegment] = result.data;
+
+				} );
+
+			// Save to array of ongoing server requests.
+			this.ongoingApiRequests.push( request )
+
+		}
+
+	}
 
     /**
      * Render NavigationComponent.
@@ -49,12 +130,23 @@ class NavigationComponent extends React.Component {
         };
 
         return (
-            <ul className="menu">
-                { this.props.menuItems ? this.props.menuItems.map( displayMenuItem ) : '' }
+            <ul className='menu'>
+                { this.state.menuItems.map( displayMenuItem ) }
             </ul>
         );
 
     }
+
+	/**
+	 * Abort any active server request on unmount.
+	 */
+	componentWillUnmount() {
+
+		for (let request of this.ongoingApiRequests) {
+			request.abort();
+		}
+
+	}
 
 }
 

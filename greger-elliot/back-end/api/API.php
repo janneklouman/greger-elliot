@@ -80,15 +80,30 @@ class API extends \Controller {
         // Set response headers and status code.
         $this->getResponse()->addHeader('Content-Type', 'application/json');
 
-        return json_encode(
+		// Current url segment for menu.
+		$urlSegment = \Convert::raw2sql($request->param('ID'));
+		$lang 		= 'sv';
+
+		if ($urlSegment && 'undefined' !== $urlSegment) {
+			\Translatable::disable_locale_filter();
+			$page = \Page::get()->filter('URLSegment', $urlSegment)->first();
+			if ($page) {
+				$lang = \i18n::get_lang_from_locale($page->Locale);
+			}
+			\Translatable::enable_locale_filter();
+		}
+
+		return json_encode(
 			[
 				[
-					'lang' => 'sv',
-					'name' => 'Svenska'
+					'lang' 		=> 'sv',
+					'name' 		=> 'Svenska',
+					'isCurrent' => 'sv' === $lang
 				],
 				[
-					'lang' => 'en',
-					'name' => 'English'
+					'lang' 		=> 'en',
+					'name' 		=> 'English',
+					'isCurrent' => 'en' === $lang
 				]
 			]
 		);
@@ -110,7 +125,12 @@ class API extends \Controller {
 
 		// Grab a specific page ID from the menu.
 		$specificPageUrlSegment = \Convert::raw2sql($request->param('ID'));
-		if ($specificPageUrlSegment && 'undefined' !== $specificPageUrlSegment) {
+
+		if ('undefined' === $specificPageUrlSegment) {
+			$specificPageUrlSegment = \Config::inst()->get('RootURLController', 'default_homepage_link');
+		}
+
+		if ($specificPageUrlSegment) {
 			$filter['URLSegment'] = $specificPageUrlSegment;
 		}
 
