@@ -1192,15 +1192,15 @@ var NavigationComponent = (function (_React$Component) {
     */
 			var displayMenuItem = function displayMenuItem(item) {
 
-				var activeClassName = 'menu-item--focused';
+				var activeClassName = 'menu__link--focused';
 
 				return _react2['default'].createElement(
 					'li',
-					{ key: item.key },
+					{ key: item.key, className: 'menu__item' },
 					_react2['default'].createElement(
 						_reactRouter.Link,
 						{
-							className: 'menu-item',
+							className: 'menu__link',
 							activeClassName: activeClassName,
 							onlyActiveOnIndex: true,
 							to: '/' + item.urlSegment },

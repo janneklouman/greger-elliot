@@ -116,12 +116,12 @@ class NavigationComponent extends React.Component {
          */
         var displayMenuItem = (item) => {
 
-			let activeClassName = 'menu-item--focused';
+			let activeClassName = 'menu__link--focused';
 
             return (
-                <li key={ item.key }>
+                <li key={ item.key } className='menu__item'>
                         <Link
-							className={'menu-item'}
+							className='menu__link'
 							activeClassName={activeClassName}
 							onlyActiveOnIndex={true}
 							to={ '/' + item.urlSegment } >{ item.menuTitle }</Link>

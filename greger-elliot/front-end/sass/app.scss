@@ -33,6 +33,13 @@
 		@include tablet {
 			width: $width-section-first-tablet;
 		}
+
+		@include mobile {
+			left: 0;
+			width: 100%;
+			padding: $padding-section $padding-section 0;
+		}
+
 	}
 
 	// Content section.
@@ -48,6 +55,12 @@
 			left: $width-section-first-tablet;
 			width: calc(100% - #{$width-section-first-tablet});
 		}
+
+		@include mobile {
+			left: 0;
+			width: 100%;
+		}
+
 	}
 
 }

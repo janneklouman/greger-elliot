@@ -9,34 +9,61 @@
 	text-align: center;
 	padding: 25px 0;
 
+	@include mobile {
+		padding: 0;
+		text-align: right;
+		position: fixed;
+		bottom: $padding-section * 2;
+		right: $padding-section * 2;
+	}
+
+	&__item {
+
+		@include mobile {
+			display: none;
+
+			&:last-of-type {
+				display: block;
+			}
+		}
+
+	}
+
+	&__link {
+
+		cursor: pointer;
+		font-family: $font-family-menu;
+		font-size: $font-size-navigation;
+		line-height: 1.5;
+		color: $color-navigation;
+		text-decoration: none;
+
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+
+		@include mobile {
+			line-height: inherit;
+			font-family: $font-family-menu-mobile;
+			font-size: $font-size-navigation-mobile;
+		}
+
+		&:hover {
+			color: ORANGE;
+		}
+
+		&:active {
+			color: DARKORANGE;
+		}
+
+		&--focused {
+			color: DARKORANGE;
+		}
+
+	}
+
 }
 
-.menu-item {
-
-	cursor: pointer;
-	font-family: $font-family-menu;
-	font-size: $font-size-navigation;
-	line-height: 1.5;
-	color: $color-navigation;
-	text-decoration: none;
-
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-
-	&:hover {
-		color: ORANGE;
-	}
-
-	&:active {
-		color: DARKORANGE;
-	}
-
-	&--focused {
-		color: DARKORANGE;
-	}
-
-}

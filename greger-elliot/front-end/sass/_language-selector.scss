@@ -7,6 +7,11 @@
 
 	list-style-type: none;
 
+	@include mobile {
+		position: fixed;
+		bottom: $padding-section;
+	}
+
 	&__item {
 		display: inline-block;
 		cursor: pointer;
@@ -17,9 +22,14 @@
 		float: right;
 		padding-bottom: $padding-section;
 
+		@include mobile {
+			margin-left: $padding-section;
+		}
+
 		&--focused {
 			color: DARKORANGE;
 		}
+
 	}
 
 }
