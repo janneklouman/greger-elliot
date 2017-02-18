@@ -3,6 +3,13 @@
   padding: 0;
   box-sizing: border-box; }
 
+*:fullscreen,
+*:-webkit-full-screen,
+*:-moz-full-screen,
+html,
+body {
+  background-color: white; }
+
 .cf {
   clear: both; }
 
@@ -13,6 +20,12 @@
   -o-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent; }
+  .image-gallery:-webkit-full-screen {
+    width: 100vw;
+    height: 100vh; }
+    .image-gallery:-webkit-full-screen .image-gallery-content {
+      margin-top: 50vh;
+      transform: translateY(-50%); }
   .image-gallery.fullscreen-modal {
     background: #ffffff;
     bottom: 0;
