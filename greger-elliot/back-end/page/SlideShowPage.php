@@ -43,6 +43,21 @@ class SlideShowPage extends Page implements JsonSerializable
      */
     public function jsonSerialize() {
 
+		$originalLocale = \Translatable::get_current_locale();
+		\Translatable::set_current_locale($this->Locale);
+		\i18n::set_locale($this->Locale);
+
+		$translations = [
+			'next' 			=> _t('Controls.Next', 'Next'),
+			'play' 			=> _t('Controls.Play', 'Play'),
+			'pause' 		=> _t('Controls.Pause', 'Pause'),
+			'previous' 		=> _t('Controls.Previous', 'Previous'),
+			'fullScreen' 	=> _t('Controls.Full_Screen', 'Full screen')
+		];
+
+		\Translatable::set_current_locale($originalLocale);
+		\i18n::set_locale($originalLocale);
+
         return [
             'title'     	=> $this->Title,
             'menuTitle' 	=> $this->MenuTitle,
@@ -54,7 +69,8 @@ class SlideShowPage extends Page implements JsonSerializable
             'className' 	=> $this->ClassName,
 			'language'		=> substr($this->Locale, 0, 2),
             'images'    	=> $this->imagesAsJson(),
-            'key'       	=> 'page-' . $this->ID // used by react
+            'key'       	=> 'page-' . $this->ID, // used by react
+			'translations'  => $translations
         ];
 
     }

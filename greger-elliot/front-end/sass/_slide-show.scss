@@ -30,3 +30,34 @@
 	text-align: center;
 
 }
+
+.image-gallery {
+
+	&__title {
+
+	}
+
+	&__controls {
+		position: fixed;
+		top: 10px;
+		opacity: .7;
+	}
+
+	&__control {
+		display: inline-block;
+		width: 23px;
+		height: 23px;
+		margin-right: 10px;
+
+		&:hover {
+			cursor: pointer;
+			opacity: .7;
+			-webkit-transition: all 400ms;
+			-moz-transition: all 400ms;
+			-ms-transition: all 400ms;
+			-o-transition: all 400ms;
+			transition: all 400ms;
+		}
+	}
+
+}

@@ -725,7 +725,8 @@ var SlideShowPageComponent = (function (_React$Component) {
 		// Initial state.
 		this.state = {
 			currentTitle: '',
-			images: []
+			images: [],
+			isPlaying: true
 		};
 	}
 
@@ -783,6 +784,60 @@ var SlideShowPageComponent = (function (_React$Component) {
 		value: function handleImageClick(image) {
 			this.imageGallery.fullScreen();
 		}
+	}, {
+		key: 'slideRight',
+		value: function slideRight() {
+			var idx = this.imageGallery.getCurrentIndex();
+			this.imageGallery.slideToIndex(idx + 1);
+		}
+	}, {
+		key: 'slideLeft',
+		value: function slideLeft() {
+			var idx = this.imageGallery.getCurrentIndex();
+			this.imageGallery.slideToIndex(idx - 1);
+		}
+	}, {
+		key: 'fullScreen',
+		value: function fullScreen() {
+			this.imageGallery.fullScreen();
+		}
+	}, {
+		key: 'playOrPause',
+		value: function playOrPause() {
+			if (this.state.isPlaying) {
+				this.imageGallery.pause();
+				this.setState({ isPlaying: false });
+			} else {
+				this.imageGallery.play();
+				this.setState({ isPlaying: true });
+			}
+		}
+	}, {
+		key: 'renderCustomControls',
+		value: function renderCustomControls() {
+
+			return _react2['default'].createElement(
+				'div',
+				{ className: 'image-gallery__controls' },
+				_react2['default'].createElement('img', {
+					className: 'image-gallery__control',
+					src: 'greger-elliot/front-end/dist/image/left-arrow.svg',
+					onClick: this.slideLeft.bind(this), alt: '←', title: this.props.page.translations.previous }),
+				_react2['default'].createElement('img', {
+					className: 'image-gallery__control',
+					src: this.state.isPlaying ? 'greger-elliot/front-end/dist/image/pause.svg' : 'greger-elliot/front-end/dist/image/play.svg',
+					onClick: this.playOrPause.bind(this), alt: '➤',
+					title: this.state.isPlaying ? this.props.page.translations.pause : this.props.page.translations.play }),
+				_react2['default'].createElement('img', {
+					className: 'image-gallery__control',
+					src: 'greger-elliot/front-end/dist/image/right-arrow.svg',
+					onClick: this.slideRight.bind(this), alt: '→', title: this.props.page.translations.next }),
+				_react2['default'].createElement('img', {
+					className: 'image-gallery__control',
+					src: 'greger-elliot/front-end/dist/image/full-screen.svg',
+					onClick: this.fullScreen.bind(this), alt: '⤢', title: this.props.page.translations.fullScreen })
+			);
+		}
 
 		/**
    * Render SlideShowPageComponent.
@@ -800,7 +855,8 @@ var SlideShowPageComponent = (function (_React$Component) {
 				lazyLoad: true,
 				showNav: false,
 				showThumbnails: false,
-				autoPlay: true
+				autoPlay: true,
+				renderCustomControls: this.renderCustomControls.bind(this)
 			};
 
 			return _react2['default'].createElement(
@@ -818,7 +874,8 @@ var SlideShowPageComponent = (function (_React$Component) {
 					slideDuration: galleryOptions.slideDuration,
 					autoPlay: galleryOptions.autoPlay,
 					onSlide: this.handleImageSlide.bind(this),
-					onClick: this.handleImageClick.bind(this)
+					onClick: this.handleImageClick.bind(this),
+					renderCustomControls: galleryOptions.renderCustomControls
 				}) : '',
 				_react2['default'].createElement(
 					'h1',

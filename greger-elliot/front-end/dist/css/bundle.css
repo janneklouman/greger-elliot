@@ -432,6 +432,25 @@ p {
   margin: 0;
   text-align: center; }
 
+.image-gallery__controls {
+  position: fixed;
+  top: 10px;
+  opacity: .7; }
+
+.image-gallery__control {
+  display: inline-block;
+  width: 23px;
+  height: 23px;
+  margin-right: 10px; }
+  .image-gallery__control:hover {
+    cursor: pointer;
+    opacity: .7;
+    -webkit-transition: all 400ms;
+    -moz-transition: all 400ms;
+    -ms-transition: all 400ms;
+    -o-transition: all 400ms;
+    transition: all 400ms; }
+
 #greger-elliot-root section.first {
   position: fixed;
   top: 0;
