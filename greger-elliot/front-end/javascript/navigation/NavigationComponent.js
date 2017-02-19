@@ -31,7 +31,9 @@ class NavigationComponent extends React.Component {
 
 		// Initial state.
 		this.state = {
-			menuItems: []
+			menuItems: [],
+			language: '',
+			isExpanded: false
 		};
 
     };
@@ -72,7 +74,8 @@ class NavigationComponent extends React.Component {
 
 			// Update state.
 			this.setState({
-				menuItems: this.finishedApiRequests[urlSegment]
+				menuItems: this.finishedApiRequests[urlSegment],
+				language: this.finishedApiRequests[urlSegment][0].language
 			});
 
 		}
@@ -86,7 +89,8 @@ class NavigationComponent extends React.Component {
 
 					// Update state.
 					this.setState( {
-						menuItems: result.data
+						menuItems: result.data,
+						language: result.data[0].language
 					} );
 
 					// Save to cached requests.
@@ -99,6 +103,17 @@ class NavigationComponent extends React.Component {
 
 		}
 
+	}
+
+	/**
+	 * Expands or hides mobile navigation.
+	 */
+	expandOrHideMenu() {
+		if (this.state.isExpanded) {
+		this.setState({ isExpanded: false });
+		} else {
+			this.setState({ isExpanded: true });
+		}
 	}
 
     /**
@@ -121,18 +136,30 @@ class NavigationComponent extends React.Component {
             return (
                 <li key={ item.key } className='menu__item'>
                         <Link
-							className='menu__link'
+							className='menu__link menu__link--large'
 							activeClassName={activeClassName}
 							onlyActiveOnIndex={true}
+							onClick={this.expandOrHideMenu.bind(this)}
 							to={ '/' + item.urlSegment } >{ item.menuTitle }</Link>
                 </li>
             )
         };
 
+		// Todo get translations form back end.
+		let expandText 	= 'sv' === this.state.language ?  'Meny' : 'Menu';
+		let hideText 	= 'sv' === this.state.language ? 'Dölj menyn' : 'Hide menu';
+		let menuText 	= this.state.isExpanded ? hideText : expandText;
+		let expandClass = this.state.isExpanded ? ' menu--expanded' : '';
+
         return (
-            <ul className='menu'>
-                { this.state.menuItems.map( displayMenuItem ) }
-            </ul>
+			<div className="menu-holder">
+				<ul className={ 'menu' + expandClass }>
+					{ this.state.menuItems.map( displayMenuItem ) }
+				</ul>
+				<a href="javascript:void(0)"
+				   className='menu__link menu__link--mobile-expand'
+				   onClick={this.expandOrHideMenu.bind(this)}>{ menuText }</a>
+			</div>
         );
 
     }

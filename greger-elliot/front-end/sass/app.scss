@@ -43,6 +43,7 @@ body {
 		}
 
 		@include mobile {
+			position: absolute;
 			left: 0;
 			width: 100%;
 			padding: $padding-section $padding-section 0;
@@ -58,6 +59,7 @@ body {
 		left: $width-section-first;
 		width: calc(100% - #{$width-section-first});
 		padding: $padding-section;
+
 
 		@include tablet {
 			left: $width-section-first-tablet;

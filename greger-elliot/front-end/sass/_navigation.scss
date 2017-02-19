@@ -3,6 +3,18 @@
 ///  Janne Klouman <janne@klouman.com>  ////
 //                                     /////
 
+.menu-holder {
+	@include mobile {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		height: 64px;
+		width: 100vw;
+		z-index: 2;
+		background: white;
+	}
+}
+
 .menu {
 
 	list-style-type: none;
@@ -10,23 +22,38 @@
 	padding: 25px 0;
 
 	@include mobile {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 		padding: 0;
 		text-align: right;
 		position: fixed;
 		bottom: $padding-section * 2;
 		right: $padding-section * 2;
+
+		height: 100vh;
+		width: 100vw;
+
+		top: 100vh;
+		left: 0;
+		opacity: .9;
+		background: white;
+		z-index: 10;
+		-webkit-transition: top 500ms;
+		-moz-transition: top 500ms;
+		-ms-transition: top 500ms;
+		-o-transition: top 500ms;
+		transition: top 500ms;
+
+		&--expanded {
+			top: 0;
+		}
 	}
 
 	&__item {
-
 		@include mobile {
-			display: none;
-
-			&:last-of-type {
-				display: block;
-			}
+			padding: .5rem;
 		}
-
 	}
 
 	&__link {
@@ -61,6 +88,21 @@
 
 		&--focused {
 			color: DARKORANGE;
+		}
+
+		&--large {
+			font-size: 1.25rem;
+		}
+
+		&--mobile-expand {
+			display: none;
+			@include mobile {
+				position: fixed;
+				display: block;
+				z-index: 20;
+				bottom: $padding-section * 2;
+				right: $padding-section * 2;
+			}
 		}
 
 	}

@@ -10,6 +10,7 @@
 	@include mobile {
 		position: fixed;
 		bottom: $padding-section;
+		z-index: 2;
 	}
 
 	&__item {

@@ -835,6 +835,12 @@ var SlideShowPageComponent = (function (_React$Component) {
 				this.setState({ isPlaying: true });
 			}
 		}
+
+		/**
+   * Renders the control elements for the image gallery.
+   *
+   * @returns 	{XML}
+      */
 	}, {
 		key: 'renderCustomControls',
 		value: function renderCustomControls() {
@@ -1185,7 +1191,9 @@ var NavigationComponent = (function (_React$Component) {
 
 		// Initial state.
 		this.state = {
-			menuItems: []
+			menuItems: [],
+			language: '',
+			isExpanded: false
 		};
 	}
 
@@ -1232,7 +1240,8 @@ var NavigationComponent = (function (_React$Component) {
 
 				// Update state.
 				this.setState({
-					menuItems: this.finishedApiRequests[urlSegment]
+					menuItems: this.finishedApiRequests[urlSegment],
+					language: this.finishedApiRequests[urlSegment][0].language
 				});
 			}
 
@@ -1244,7 +1253,8 @@ var NavigationComponent = (function (_React$Component) {
 
 					// Update state.
 					_this.setState({
-						menuItems: result.data
+						menuItems: result.data,
+						language: result.data[0].language
 					});
 
 					// Save to cached requests.
@@ -1257,6 +1267,19 @@ var NavigationComponent = (function (_React$Component) {
 		}
 
 		/**
+   * Expands or hides mobile navigation.
+   */
+	}, {
+		key: 'expandOrHideMenu',
+		value: function expandOrHideMenu() {
+			if (this.state.isExpanded) {
+				this.setState({ isExpanded: false });
+			} else {
+				this.setState({ isExpanded: true });
+			}
+		}
+
+		/**
    * Render NavigationComponent.
    *
    * @returns {XML}
@@ -1264,6 +1287,7 @@ var NavigationComponent = (function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
+			var _this2 = this;
 
 			/**
     * The HTML of a single menu item.
@@ -1281,19 +1305,37 @@ var NavigationComponent = (function (_React$Component) {
 					_react2['default'].createElement(
 						_reactRouter.Link,
 						{
-							className: 'menu__link',
+							className: 'menu__link menu__link--large',
 							activeClassName: activeClassName,
 							onlyActiveOnIndex: true,
+							onClick: _this2.expandOrHideMenu.bind(_this2),
 							to: '/' + item.urlSegment },
 						item.menuTitle
 					)
 				);
 			};
 
+			// Todo get translations form back end.
+			var expandText = 'sv' === this.state.language ? 'Meny' : 'Menu';
+			var hideText = 'sv' === this.state.language ? 'Dölj menyn' : 'Hide menu';
+			var menuText = this.state.isExpanded ? hideText : expandText;
+			var expandClass = this.state.isExpanded ? ' menu--expanded' : '';
+
 			return _react2['default'].createElement(
-				'ul',
-				{ className: 'menu' },
-				this.state.menuItems.map(displayMenuItem)
+				'div',
+				{ className: 'menu-holder' },
+				_react2['default'].createElement(
+					'ul',
+					{ className: 'menu' + expandClass },
+					this.state.menuItems.map(displayMenuItem)
+				),
+				_react2['default'].createElement(
+					'a',
+					{ href: 'javascript:void(0)',
+						className: 'menu__link menu__link--mobile-expand',
+						onClick: this.expandOrHideMenu.bind(this) },
+					menuText
+				)
 			);
 		}
 
