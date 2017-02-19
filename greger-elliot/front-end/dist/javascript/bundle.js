@@ -783,7 +783,7 @@ var SlideShowPageComponent = (function (_React$Component) {
 	}, {
 		key: 'handleImageClick',
 		value: function handleImageClick(image) {
-			this.imageGallery.fullScreen();
+			this.enterOrExitFullScreen();
 		}
 
 		/**
@@ -1084,10 +1084,14 @@ var LanguageSelectorComponent = (function (_React$Component) {
 			};
 
 			return _react2['default'].createElement(
-				'ul',
-				{ className: 'language-selector' },
-				this.state.languages.length ? this.state.languages.map(displayLanguageSelectorItem) : '',
-				_react2['default'].createElement('div', { className: 'cf' })
+				'div',
+				{ className: 'language-selector-holder' },
+				_react2['default'].createElement(
+					'ul',
+					{ className: 'language-selector' },
+					this.state.languages.length ? this.state.languages.map(displayLanguageSelectorItem) : '',
+					_react2['default'].createElement('div', { className: 'cf' })
+				)
 			);
 		}
 
@@ -1323,7 +1327,7 @@ var NavigationComponent = (function (_React$Component) {
 
 			return _react2['default'].createElement(
 				'div',
-				{ className: 'menu-holder' },
+				null,
 				_react2['default'].createElement(
 					'ul',
 					{ className: 'menu' + expandClass },

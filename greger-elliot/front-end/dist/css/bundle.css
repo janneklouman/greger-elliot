@@ -341,16 +341,6 @@ p {
     .logo {
       display: none; } }
 
-@media (max-width: 767px) {
-  .menu-holder {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    height: 64px;
-    width: 100vw;
-    z-index: 2;
-    background: white; } }
-
 .menu {
   list-style-type: none;
   text-align: center;
@@ -418,13 +408,23 @@ p {
           bottom: 20px;
           right: 20px; } }
 
+@media (max-width: 767px) {
+  .language-selector-holder {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 64px;
+    width: 100vw;
+    z-index: 2;
+    background: white; } }
+
 .language-selector {
   list-style-type: none; }
   @media (max-width: 767px) {
     .language-selector {
       position: fixed;
       bottom: 10px;
-      z-index: 2; } }
+      z-index: 4; } }
   .language-selector__item {
     display: inline-block;
     cursor: pointer;
@@ -455,7 +455,7 @@ p {
   cursor: pointer; }
   @media (max-width: 767px) {
     .image-gallery-image img {
-      max-height: calc(100vh - 64px - 48px); } }
+      max-height: calc(100vh - 80px - 0px - 20px - 48px - 40px); } }
 
 .slide-show-description {
   height: 48px;
@@ -466,6 +466,21 @@ p {
   font-weight: 500;
   margin: 0;
   text-align: center; }
+
+.image-gallery.fullscreen-modal .image-gallery__controls {
+  left: 50vw;
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+  transform: translateX(-50%); }
+  @media (max-width: 767px) {
+    .image-gallery.fullscreen-modal .image-gallery__controls {
+      display: none; } }
+
+@media (max-width: 767px) {
+  .image-gallery.fullscreen-modal .image-gallery-image img {
+    max-height: calc(100vh - 40px); } }
 
 .image-gallery:-webkit-full-screen {
   width: 100vw;
@@ -480,6 +495,9 @@ p {
     -ms-transform: translateX(-50%);
     -o-transform: translateX(-50%);
     transform: translateX(-50%); }
+  @media (max-width: 767px) {
+    .image-gallery:-webkit-full-screen .image-gallery-image img {
+      max-height: calc(100vh - 40px); } }
 
 .image-gallery__controls {
   position: absolute;
@@ -514,6 +532,7 @@ p {
       position: absolute;
       left: 0;
       width: 100%;
+      z-index: 3;
       padding: 10px 10px 0; } }
 
 #greger-elliot-root section.second {
@@ -529,4 +548,5 @@ p {
   @media (max-width: 767px) {
     #greger-elliot-root section.second {
       left: 0;
-      width: 100%; } }
+      width: 100%;
+      z-index: 2; } }

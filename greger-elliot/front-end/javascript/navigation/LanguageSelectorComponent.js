@@ -122,10 +122,12 @@ class LanguageSelectorComponent extends React.Component {
 		};
 
         return (
-			<ul className="language-selector">
-				{ this.state.languages.length ? this.state.languages.map( displayLanguageSelectorItem ) : '' }
-				<div className="cf"></div>
-			</ul>
+			<div className="language-selector-holder">
+				<ul className="language-selector">
+					{ this.state.languages.length ? this.state.languages.map( displayLanguageSelectorItem ) : '' }
+					<div className="cf"></div>
+				</ul>
+			</div>
 		);
     }
 

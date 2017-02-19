@@ -70,7 +70,7 @@ class SlideShowPageComponent extends React.Component {
 	 * @param 	image
      */
 	handleImageClick(image) {
-		this.imageGallery.fullScreen();
+		this.enterOrExitFullScreen();
 	}
 
 	/**

@@ -46,6 +46,7 @@ body {
 			position: absolute;
 			left: 0;
 			width: 100%;
+			z-index: 3;
 			padding: $padding-section $padding-section 0;
 		}
 
@@ -69,6 +70,7 @@ body {
 		@include mobile {
 			left: 0;
 			width: 100%;
+			z-index: 2;
 		}
 
 	}

@@ -3,18 +3,6 @@
 ///  Janne Klouman <janne@klouman.com>  ////
 //                                     /////
 
-.menu-holder {
-	@include mobile {
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		height: 64px;
-		width: 100vw;
-		z-index: 2;
-		background: white;
-	}
-}
-
 .menu {
 
 	list-style-type: none;

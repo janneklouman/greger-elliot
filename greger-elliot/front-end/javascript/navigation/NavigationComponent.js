@@ -152,7 +152,7 @@ class NavigationComponent extends React.Component {
 		let expandClass = this.state.isExpanded ? ' menu--expanded' : '';
 
         return (
-			<div className="menu-holder">
+			<div>
 				<ul className={ 'menu' + expandClass }>
 					{ this.state.menuItems.map( displayMenuItem ) }
 				</ul>
