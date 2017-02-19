@@ -837,39 +837,6 @@ var SlideShowPageComponent = (function (_React$Component) {
 		}
 
 		/**
-   * Renders the control elements for the image gallery.
-   *
-   * @returns 	{XML}
-      */
-	}, {
-		key: 'renderCustomControls',
-		value: function renderCustomControls() {
-
-			return _react2['default'].createElement(
-				'div',
-				{ className: 'image-gallery__controls' },
-				_react2['default'].createElement('img', {
-					className: 'image-gallery__control',
-					src: 'greger-elliot/front-end/dist/image/left-arrow.svg',
-					onClick: this.slideLeft.bind(this), alt: '←', title: this.props.page.translations.previous }),
-				_react2['default'].createElement('img', {
-					className: 'image-gallery__control',
-					src: this.state.isPlaying ? 'greger-elliot/front-end/dist/image/pause.svg' : 'greger-elliot/front-end/dist/image/play.svg',
-					onClick: this.playOrPause.bind(this), alt: '➤',
-					title: this.state.isPlaying ? this.props.page.translations.pause : this.props.page.translations.play }),
-				_react2['default'].createElement('img', {
-					className: 'image-gallery__control',
-					src: 'greger-elliot/front-end/dist/image/right-arrow.svg',
-					onClick: this.slideRight.bind(this), alt: '→', title: this.props.page.translations.next }),
-				_react2['default'].createElement('img', {
-					className: 'image-gallery__control',
-					src: 'greger-elliot/front-end/dist/image/full-screen.svg',
-					onClick: this.enterOrExitFullScreen.bind(this), alt: '⤢',
-					title: this.props.page.translations.fullScreen })
-			);
-		}
-
-		/**
    * Render SlideShowPageComponent.
    *
    * @return 	{XML}
@@ -885,13 +852,44 @@ var SlideShowPageComponent = (function (_React$Component) {
 				lazyLoad: true,
 				showNav: false,
 				showThumbnails: false,
-				autoPlay: true,
-				renderCustomControls: this.renderCustomControls.bind(this)
+				autoPlay: true
+			};
+
+			/**
+    * Renders the control elements for the image gallery.
+    *
+    * @returns 	{XML}
+    */
+			var jrenderCustomControls = function jrenderCustomControls() {
+
+				return _react2['default'].createElement(
+					'div',
+					{ className: 'image-gallery__controls' },
+					_react2['default'].createElement('img', {
+						className: 'image-gallery__control image-gallery__control--padded',
+						src: 'greger-elliot/front-end/dist/image/left-arrow.svg',
+						onClick: _this.slideLeft.bind(_this), alt: '←', title: _this.props.page.translations.previous }),
+					_react2['default'].createElement('img', {
+						className: 'image-gallery__control',
+						src: _this.state.isPlaying ? 'greger-elliot/front-end/dist/image/pause.svg' : 'greger-elliot/front-end/dist/image/play.svg',
+						onClick: _this.playOrPause.bind(_this), alt: '➤',
+						title: _this.state.isPlaying ? _this.props.page.translations.pause : _this.props.page.translations.play }),
+					_react2['default'].createElement('img', {
+						className: 'image-gallery__control image-gallery__control--padded',
+						src: 'greger-elliot/front-end/dist/image/right-arrow.svg',
+						onClick: _this.slideRight.bind(_this), alt: '→', title: _this.props.page.translations.next }),
+					_react2['default'].createElement('img', {
+						className: 'image-gallery__control image-gallery__control--padded',
+						src: 'greger-elliot/front-end/dist/image/full-screen.svg',
+						onClick: _this.enterOrExitFullScreen.bind(_this), alt: '⤢',
+						title: _this.props.page.translations.fullScreen })
+				);
 			};
 
 			return _react2['default'].createElement(
 				'article',
 				{ className: 'content-component content-component--slide-show-page' },
+				jrenderCustomControls(),
 				this.state.images.length ? _react2['default'].createElement(_reactImageGallery2['default'], {
 					ref: function (imageGallery) {
 						_this.imageGallery = imageGallery;
@@ -1309,7 +1307,7 @@ var NavigationComponent = (function (_React$Component) {
 					_react2['default'].createElement(
 						_reactRouter.Link,
 						{
-							className: 'menu__link menu__link--large',
+							className: 'menu__link menu__link--large-mobile',
 							activeClassName: activeClassName,
 							onlyActiveOnIndex: true,
 							onClick: _this2.expandOrHideMenu.bind(_this2),

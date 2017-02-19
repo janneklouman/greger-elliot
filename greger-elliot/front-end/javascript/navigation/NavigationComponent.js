@@ -136,7 +136,7 @@ class NavigationComponent extends React.Component {
             return (
                 <li key={ item.key } className='menu__item'>
                         <Link
-							className='menu__link menu__link--large'
+							className='menu__link menu__link--large-mobile'
 							activeClassName={activeClassName}
 							onlyActiveOnIndex={true}
 							onClick={this.expandOrHideMenu.bind(this)}

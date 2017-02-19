@@ -78,8 +78,10 @@
 			color: DARKORANGE;
 		}
 
-		&--large {
-			font-size: 1.25rem;
+		&--large-mobile {
+			@include mobile {
+				font-size: 1.25rem;
+			}
 		}
 
 		&--mobile-expand {
@@ -88,7 +90,7 @@
 				position: fixed;
 				display: block;
 				z-index: 20;
-				bottom: $padding-section * 2;
+				bottom: $padding-section;
 				right: $padding-section * 2;
 			}
 		}

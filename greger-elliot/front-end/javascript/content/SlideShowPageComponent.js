@@ -115,46 +115,6 @@ class SlideShowPageComponent extends React.Component {
 		}
 	}
 
-	/**
-	 * Renders the control elements for the image gallery.
-	 *
-	 * @returns 	{XML}
-     */
-	renderCustomControls() {
-
-		return (
-			<div className="image-gallery__controls">
-				<img
-					className="image-gallery__control"
-					src="greger-elliot/front-end/dist/image/left-arrow.svg"
-					onClick={this.slideLeft.bind(this)} alt="←" title={this.props.page.translations.previous} />
-				<img
-					className="image-gallery__control"
-					src={
-						this.state.isPlaying
-						? 'greger-elliot/front-end/dist/image/pause.svg'
-						: 'greger-elliot/front-end/dist/image/play.svg'
-					}
-					onClick={this.playOrPause.bind(this)} alt="➤"
-					title={
-						this.state.isPlaying
-						? this.props.page.translations.pause
-						: this.props.page.translations.play
-					} />
-				<img
-					className="image-gallery__control"
-					src="greger-elliot/front-end/dist/image/right-arrow.svg"
-					onClick={this.slideRight.bind(this)} alt="→" title={this.props.page.translations.next} />
-				<img
-					className="image-gallery__control"
-					src="greger-elliot/front-end/dist/image/full-screen.svg"
-					onClick={this.enterOrExitFullScreen.bind(this)} alt="⤢"
-					title={this.props.page.translations.fullScreen} />
-			</div>
-		);
-
-	}
-
     /**
      * Render SlideShowPageComponent.
      *
@@ -168,12 +128,52 @@ class SlideShowPageComponent extends React.Component {
 			lazyLoad: true,
 			showNav: false,
 			showThumbnails: false,
-			autoPlay: true,
-			renderCustomControls: this.renderCustomControls.bind(this)
+			autoPlay: true
 		};
+
+		/**
+		 * Renders the control elements for the image gallery.
+		 *
+		 * @returns 	{XML}
+		 */
+		let jrenderCustomControls = () => {
+
+			return (
+				<div className="image-gallery__controls">
+					<img
+						className="image-gallery__control image-gallery__control--padded"
+						src="greger-elliot/front-end/dist/image/left-arrow.svg"
+						onClick={this.slideLeft.bind(this)} alt="←" title={this.props.page.translations.previous} />
+					<img
+						className="image-gallery__control"
+						src={
+						this.state.isPlaying
+						? 'greger-elliot/front-end/dist/image/pause.svg'
+						: 'greger-elliot/front-end/dist/image/play.svg'
+					}
+						onClick={this.playOrPause.bind(this)} alt="➤"
+						title={
+						this.state.isPlaying
+						? this.props.page.translations.pause
+						: this.props.page.translations.play
+					} />
+					<img
+						className="image-gallery__control image-gallery__control--padded"
+						src="greger-elliot/front-end/dist/image/right-arrow.svg"
+						onClick={this.slideRight.bind(this)} alt="→" title={this.props.page.translations.next} />
+					<img
+						className="image-gallery__control image-gallery__control--padded"
+						src="greger-elliot/front-end/dist/image/full-screen.svg"
+						onClick={this.enterOrExitFullScreen.bind(this)} alt="⤢"
+						title={this.props.page.translations.fullScreen} />
+				</div>
+			);
+
+		}
 
         return (
             <article className="content-component content-component--slide-show-page">
+				{ jrenderCustomControls() }
 				{
 					this.state.images.length ?
 						<ImageGallery
@@ -191,7 +191,6 @@ class SlideShowPageComponent extends React.Component {
 						/>
 						: ''
 				}
-
 				<h1 className="slide-show-description">{this.state.currentTitle}</h1>
             </article>
         );
