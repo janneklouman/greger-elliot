@@ -15,6 +15,7 @@
 	max-height: calc(100vh - #{($padding-section * 2)} - #{$height-slideshow-description} - #{$height-language-bar});
 	height: auto;
 	width: auto;
+	cursor: pointer;
 
 }
 
@@ -33,13 +34,32 @@
 
 .image-gallery {
 
+	&:-webkit-full-screen {
+		width: 100vw;
+		height: 100vh;
+
+		.image-gallery-content {
+			margin-top: 50vh;
+			transform: translateY(-50%);
+		}
+
+		.image-gallery__controls {
+			left: 50vw;
+			-webkit-transform: translateX(-50%);
+			-moz-transform: translateX(-50%);
+			-ms-transform: translateX(-50%);
+			-o-transform: translateX(-50%);
+			transform: translateX(-50%);
+		}
+	}
+
 	&__title {
 
 	}
 
 	&__controls {
-		position: fixed;
-		top: 10px;
+		position: absolute;
+		top: -33px;
 		opacity: .7;
 	}
 

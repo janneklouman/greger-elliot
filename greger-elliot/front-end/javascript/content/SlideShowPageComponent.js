@@ -21,7 +21,8 @@ class SlideShowPageComponent extends React.Component {
 		this.state = {
 			currentTitle: '',
 			images: [],
-			isPlaying: true
+			isPlaying: true,
+			isFullScreen: false
 		};
     };
 
@@ -72,20 +73,38 @@ class SlideShowPageComponent extends React.Component {
 		this.imageGallery.fullScreen();
 	}
 
+	/**
+	 * Slides the gallery one index forward.
+	 */
 	slideRight() {
 		let idx = this.imageGallery.getCurrentIndex();
 		this.imageGallery.slideToIndex(idx + 1);
 	}
 
+	/**
+	 * Slides the gallery one index backward.
+	 */
 	slideLeft() {
 		let idx = this.imageGallery.getCurrentIndex();
 		this.imageGallery.slideToIndex(idx - 1);
 	}
 
-	fullScreen() {
-		this.imageGallery.fullScreen();
+	/**
+	 * Enters or exits full screen mode depending on state.
+	 */
+	enterOrExitFullScreen() {
+		if (this.state.isFullScreen) {
+			this.imageGallery.fullScreen();
+			this.setState({isFullScreen: false});
+		} else {
+			this.imageGallery.exitFullScreen();
+			this.setState({isFullScreen: true});
+		}
 	}
 
+	/**
+	 * Plays or pause depending on state.
+	 */
 	playOrPause() {
 		if (this.state.isPlaying) {
 			this.imageGallery.pause();
@@ -96,6 +115,11 @@ class SlideShowPageComponent extends React.Component {
 		}
 	}
 
+	/**
+	 * Renders the control elements for the image gallery.
+	 *
+	 * @returns 	{XML}
+     */
 	renderCustomControls() {
 
 		return (
@@ -124,7 +148,8 @@ class SlideShowPageComponent extends React.Component {
 				<img
 					className="image-gallery__control"
 					src="greger-elliot/front-end/dist/image/full-screen.svg"
-					onClick={this.fullScreen.bind(this)} alt="⤢" title={this.props.page.translations.fullScreen} />
+					onClick={this.enterOrExitFullScreen.bind(this)} alt="⤢"
+					title={this.props.page.translations.fullScreen} />
 			</div>
 		);
 

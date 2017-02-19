@@ -726,7 +726,8 @@ var SlideShowPageComponent = (function (_React$Component) {
 		this.state = {
 			currentTitle: '',
 			images: [],
-			isPlaying: true
+			isPlaying: true,
+			isFullScreen: false
 		};
 	}
 
@@ -784,23 +785,45 @@ var SlideShowPageComponent = (function (_React$Component) {
 		value: function handleImageClick(image) {
 			this.imageGallery.fullScreen();
 		}
+
+		/**
+   * Slides the gallery one index forward.
+   */
 	}, {
 		key: 'slideRight',
 		value: function slideRight() {
 			var idx = this.imageGallery.getCurrentIndex();
 			this.imageGallery.slideToIndex(idx + 1);
 		}
+
+		/**
+   * Slides the gallery one index backward.
+   */
 	}, {
 		key: 'slideLeft',
 		value: function slideLeft() {
 			var idx = this.imageGallery.getCurrentIndex();
 			this.imageGallery.slideToIndex(idx - 1);
 		}
+
+		/**
+   * Enters or exits full screen mode depending on state.
+   */
 	}, {
-		key: 'fullScreen',
-		value: function fullScreen() {
-			this.imageGallery.fullScreen();
+		key: 'enterOrExitFullScreen',
+		value: function enterOrExitFullScreen() {
+			if (this.state.isFullScreen) {
+				this.imageGallery.fullScreen();
+				this.setState({ isFullScreen: false });
+			} else {
+				this.imageGallery.exitFullScreen();
+				this.setState({ isFullScreen: true });
+			}
 		}
+
+		/**
+   * Plays or pause depending on state.
+   */
 	}, {
 		key: 'playOrPause',
 		value: function playOrPause() {
@@ -835,7 +858,8 @@ var SlideShowPageComponent = (function (_React$Component) {
 				_react2['default'].createElement('img', {
 					className: 'image-gallery__control',
 					src: 'greger-elliot/front-end/dist/image/full-screen.svg',
-					onClick: this.fullScreen.bind(this), alt: '⤢', title: this.props.page.translations.fullScreen })
+					onClick: this.enterOrExitFullScreen.bind(this), alt: '⤢',
+					title: this.props.page.translations.fullScreen })
 			);
 		}
 
