@@ -14,7 +14,8 @@ class GregerElliotSiteConfigExtension extends \DataExtension
      * @var array
      */
     private static $has_one = [
-        'Logo'  => 'Image'
+        'Logo'  => 'Image',
+        'MobileLogo'  => 'Image'
     ];
 
     /**
@@ -26,11 +27,18 @@ class GregerElliotSiteConfigExtension extends \DataExtension
         $logoField->setAllowedMaxFileNumber(1);
         $logoField->setAllowedExtensions(['jpeg','jpg','gif','png']);
 
+        $mobileLogoField = \UploadField::create('MobileLogo', 'Logo för mobilen');
+        $mobileLogoField->setAllowedMaxFileNumber(1);
+        $mobileLogoField->setAllowedExtensions(['jpeg','jpg','gif','png']);
+
         $fields->removeByName('Theme');
 
-        $fields->addFieldToTab(
+        $fields->addFieldsToTab(
             'Root.Main',
-            $logoField
+			[
+				$logoField,
+				$mobileLogoField
+			]
         );
     }
 

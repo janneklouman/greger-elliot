@@ -90,9 +90,9 @@ class SlideShowPage extends Page implements JsonSerializable
                 'original'    	=> $image->AbsoluteLink(),
 				'originalAlt' 	=> $image->Title,
 				'srcSet' 	  	=> join(', ', [
-					$image->ScaleWidth(750)->AbsoluteLink() . ' 750w',
-					$image->ScaleWidth(1500)->AbsoluteLink() . ' 1500w',
-					$image->ScaleWidth(3000)->AbsoluteLink() . ' 3000w',
+					$image->ScaleWidth(1500)->AbsoluteLink() . ' 750w',
+					$image->ScaleWidth(3000)->AbsoluteLink() . ' 1500w',
+					$image->ScaleWidth(4500)->AbsoluteLink() . ' 3000w',
 				]),
 				'sizes'			=> join(', ', [
 					'(max-width: 1200px) and (min-width: 769px) calc(100vw - 320px)',

@@ -25,7 +25,8 @@ class LogoComponent extends React.Component {
 
 		// Initial state.
 		this.state = {
-			logo: {}
+			logo: {},
+			mobileLogo: {}
 		};
 
     };
@@ -51,8 +52,9 @@ class LogoComponent extends React.Component {
 
 				// Update state.
 				this.setState({
-					logo: result.data
-				});
+					logo: result.data.logo,
+					mobileLogo: result.data.mobileLogo
+				}); 
 
 			});
 
@@ -68,11 +70,12 @@ class LogoComponent extends React.Component {
      */
     render() {
 
-        let classes = [
-            'logo'
-        ];
-
-        return <img className={classes.join(' ')} src={this.state.logo.href} />;
+        return (
+			<div className='logo-holder'>
+				<img className='logo' src={this.state.logo.href} title={this.state.logo.title} />
+				<img className='logo logo--mobile' src={this.state.mobileLogo.href} title={this.state.logo.title} />
+			</div>
+		);
     }
 
 	/**

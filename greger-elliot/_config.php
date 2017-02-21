@@ -18,4 +18,4 @@ Translatable::set_allowed_locales(
 	]
 );
 
-Config::inst()->update('RootURLController', 'default_homepage_link', 'bildspel');
+Config::inst()->update('RootURLController', 'default_homepage_link', 'bilder');

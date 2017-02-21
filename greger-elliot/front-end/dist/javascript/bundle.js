@@ -193,7 +193,6 @@ var GregerApp = (function (_React$Component) {
   }, {
     key: 'handleOnLanguageSelectorClick',
     value: function handleOnLanguageSelectorClick(language) {
-
       this.switchLanguage(language);
     }
 
@@ -213,7 +212,7 @@ var GregerApp = (function (_React$Component) {
           'section',
           { className: 'first' },
           _react2['default'].createElement(_contentLogoComponent2['default'], { logo: this.state.logo }),
-          _react2['default'].createElement(_navigationNavigationComponent2['default'], { urlSegment: this.state.urlSegment })
+          _react2['default'].createElement(_navigationNavigationComponent2['default'], { urlSegment: this.state.urlSegment, onLanguageChange: this.handleOnLanguageSelectorClick.bind(this) })
         ),
         _react2['default'].createElement(
           'section',
@@ -510,7 +509,8 @@ var LogoComponent = (function (_React$Component) {
 
 		// Initial state.
 		this.state = {
-			logo: {}
+			logo: {},
+			mobileLogo: {}
 		};
 	}
 
@@ -541,7 +541,8 @@ var LogoComponent = (function (_React$Component) {
 
 				// Update state.
 				_this.setState({
-					logo: result.data
+					logo: result.data.logo,
+					mobileLogo: result.data.mobileLogo
 				});
 			});
 
@@ -558,9 +559,12 @@ var LogoComponent = (function (_React$Component) {
 		key: 'render',
 		value: function render() {
 
-			var classes = ['logo'];
-
-			return _react2['default'].createElement('img', { className: classes.join(' '), src: this.state.logo.href });
+			return _react2['default'].createElement(
+				'div',
+				{ className: 'logo-holder' },
+				_react2['default'].createElement('img', { className: 'logo', src: this.state.logo.href, title: this.state.logo.title }),
+				_react2['default'].createElement('img', { className: 'logo logo--mobile', src: this.state.mobileLogo.href, title: this.state.logo.title })
+			);
 		}
 
 		/**
@@ -812,12 +816,14 @@ var SlideShowPageComponent = (function (_React$Component) {
 	}, {
 		key: 'enterOrExitFullScreen',
 		value: function enterOrExitFullScreen() {
-			if (this.state.isFullScreen) {
-				this.imageGallery.fullScreen();
-				this.setState({ isFullScreen: false });
-			} else {
-				this.imageGallery.exitFullScreen();
-				this.setState({ isFullScreen: true });
+			if (window.innerWidth > 750) {
+				if (this.state.isFullScreen) {
+					this.imageGallery.fullScreen();
+					this.setState({ isFullScreen: false });
+				} else {
+					this.imageGallery.exitFullScreen();
+					this.setState({ isFullScreen: true });
+				}
 			}
 		}
 
@@ -846,13 +852,15 @@ var SlideShowPageComponent = (function (_React$Component) {
 		value: function render() {
 			var _this = this;
 
+			var autoPlay = window.innerWidth > 767;
+
 			var galleryOptions = {
 				slideInterval: 5000,
 				slideDuration: 500,
 				lazyLoad: true,
-				showNav: false,
+				showNav: true,
 				showThumbnails: false,
-				autoPlay: true
+				autoPlay: autoPlay
 			};
 
 			/**
@@ -860,7 +868,7 @@ var SlideShowPageComponent = (function (_React$Component) {
     *
     * @returns 	{XML}
     */
-			var jrenderCustomControls = function jrenderCustomControls() {
+			var renderControls = function renderControls() {
 
 				return _react2['default'].createElement(
 					'div',
@@ -889,7 +897,7 @@ var SlideShowPageComponent = (function (_React$Component) {
 			return _react2['default'].createElement(
 				'article',
 				{ className: 'content-component content-component--slide-show-page' },
-				jrenderCustomControls(),
+				renderControls(),
 				this.state.images.length ? _react2['default'].createElement(_reactImageGallery2['default'], {
 					ref: function (imageGallery) {
 						_this.imageGallery = imageGallery;
@@ -1282,6 +1290,18 @@ var NavigationComponent = (function (_React$Component) {
 		}
 
 		/**
+   * Switches language.
+   *
+   * @param languageCode
+      */
+	}, {
+		key: 'handleLanguageSwitch',
+		value: function handleLanguageSwitch(languageCode) {
+			this.expandOrHideMenu();
+			this.props.onLanguageChange(languageCode);
+		}
+
+		/**
    * Render NavigationComponent.
    *
    * @returns {XML}
@@ -1320,6 +1340,8 @@ var NavigationComponent = (function (_React$Component) {
 			// Todo get translations form back end.
 			var expandText = 'sv' === this.state.language ? 'Meny' : 'Menu';
 			var hideText = 'sv' === this.state.language ? 'Dölj menyn' : 'Hide menu';
+			var languageText = 'sv' === this.state.language ? 'English' : 'Svenska';
+			var languageCode = 'sv' === this.state.language ? 'en' : 'sv';
 			var menuText = this.state.isExpanded ? hideText : expandText;
 			var expandClass = this.state.isExpanded ? ' menu--expanded' : '';
 
@@ -1329,7 +1351,18 @@ var NavigationComponent = (function (_React$Component) {
 				_react2['default'].createElement(
 					'ul',
 					{ className: 'menu' + expandClass },
-					this.state.menuItems.map(displayMenuItem)
+					this.state.menuItems.map(displayMenuItem),
+					_react2['default'].createElement(
+						'li',
+						{ className: 'menu__item' },
+						_react2['default'].createElement(
+							'a',
+							{ href: 'javascript:void(0)',
+								className: 'menu__link menu__link--large-mobile menu__link--language-switch',
+								onClick: this.handleLanguageSwitch.bind(this, languageCode) },
+							languageText
+						)
+					)
 				),
 				_react2['default'].createElement(
 					'a',

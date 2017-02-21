@@ -4,6 +4,12 @@
 
 .content-component--page {
 	max-width: 700px;
-	
+
 	padding-left: 25px;
+
+	@include mobile {
+		padding-top: $height-logo-sm;
+		padding-bottom: $padding-section + $height-language-bar;
+	}
+
 }

@@ -93,12 +93,14 @@ class SlideShowPageComponent extends React.Component {
 	 * Enters or exits full screen mode depending on state.
 	 */
 	enterOrExitFullScreen() {
-		if (this.state.isFullScreen) {
-			this.imageGallery.fullScreen();
-			this.setState({isFullScreen: false});
-		} else {
-			this.imageGallery.exitFullScreen();
-			this.setState({isFullScreen: true});
+		if (window.innerWidth > 750) {
+			if (this.state.isFullScreen) {
+				this.imageGallery.fullScreen();
+				this.setState({isFullScreen: false});
+			} else {
+				this.imageGallery.exitFullScreen();
+				this.setState({isFullScreen: true});
+			}
 		}
 	}
 
@@ -122,13 +124,15 @@ class SlideShowPageComponent extends React.Component {
      */
     render() {
 
+		let autoPlay = window.innerWidth > 767;
+
 		const galleryOptions = {
 			slideInterval: 5000,
 			slideDuration: 500,
 			lazyLoad: true,
-			showNav: false,
+			showNav: true, 
 			showThumbnails: false,
-			autoPlay: true
+			autoPlay: autoPlay
 		};
 
 		/**
@@ -136,7 +140,7 @@ class SlideShowPageComponent extends React.Component {
 		 *
 		 * @returns 	{XML}
 		 */
-		let jrenderCustomControls = () => {
+		let renderControls = () => {
 
 			return (
 				<div className="image-gallery__controls">
@@ -169,11 +173,11 @@ class SlideShowPageComponent extends React.Component {
 				</div>
 			);
 
-		}
+		};
 
         return (
             <article className="content-component content-component--slide-show-page">
-				{ jrenderCustomControls() }
+				{ renderControls() }
 				{
 					this.state.images.length ?
 						<ImageGallery

@@ -169,16 +169,27 @@ class API extends \Controller {
         if (empty($result)) {
             $siteConfig = \SiteConfig::current_site_config();
             $logo = $siteConfig->Logo()->ScaleWidth(640);
+            $mobileLogo = $siteConfig->MobileLogo() ? $siteConfig->MobileLogo()->ScaleWidth(640) : $logo;
 
             $result = json_encode(
                 [
-                    'title'     => $logo->Title,
-                    'created'   => $logo->Created,
-                    'photoID'   => $logo->ID,
-                    'className' => 'Image',
-                    'href'      => stripslashes($logo->getAbsoluteURL()),
-                    'key'       => 'photo-' . $logo->ID // used by react
-                ]
+					'logo' => [
+						'title'     => $logo->Title,
+						'created'   => $logo->Created,
+						'photoID'   => $logo->ID,
+						'className' => 'Image',
+						'href'      => stripslashes($logo->getAbsoluteURL()),
+						'key'       => 'photo-' . $logo->ID // used by react
+                ],
+					'mobileLogo' => [
+						'title'     => $mobileLogo->Title,
+						'created'   => $mobileLogo->Created,
+						'photoID'   => $mobileLogo->ID,
+						'className' => 'Image',
+						'href'      => stripslashes($mobileLogo->getAbsoluteURL()),
+						'key'       => 'photo-' . $mobileLogo->ID // used by react
+					]
+				]
             );
 
             Helper::save_cache('GregerElliotLogoCache', $result, 'SiteConfig');

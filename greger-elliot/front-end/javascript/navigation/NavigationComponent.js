@@ -116,6 +116,16 @@ class NavigationComponent extends React.Component {
 		}
 	}
 
+	/**
+	 * Switches language.
+	 *
+	 * @param languageCode
+     */
+	handleLanguageSwitch(languageCode) {
+		this.expandOrHideMenu();
+		this.props.onLanguageChange(languageCode);
+	}
+
     /**
      * Render NavigationComponent.
      *
@@ -146,15 +156,22 @@ class NavigationComponent extends React.Component {
         };
 
 		// Todo get translations form back end.
-		let expandText 	= 'sv' === this.state.language ?  'Meny' : 'Menu';
-		let hideText 	= 'sv' === this.state.language ? 'Dölj menyn' : 'Hide menu';
-		let menuText 	= this.state.isExpanded ? hideText : expandText;
-		let expandClass = this.state.isExpanded ? ' menu--expanded' : '';
+		let expandText 	 = 'sv' === this.state.language ?  'Meny' : 'Menu';
+		let hideText 	 = 'sv' === this.state.language ? 'Dölj menyn' : 'Hide menu';
+		let languageText = 'sv' === this.state.language ? 'English' : 'Svenska';
+		let languageCode = 'sv' === this.state.language ? 'en' : 'sv';
+		let menuText 	 = this.state.isExpanded ? hideText : expandText;
+		let expandClass  = this.state.isExpanded ? ' menu--expanded' : '';
 
         return (
 			<div>
 				<ul className={ 'menu' + expandClass }>
 					{ this.state.menuItems.map( displayMenuItem ) }
+					<li className='menu__item'>
+						<a href="javascript:void(0)"
+						   className='menu__link menu__link--large-mobile menu__link--language-switch'
+						   onClick={this.handleLanguageSwitch.bind(this, languageCode)}>{ languageText }</a>
+					</li>
 				</ul>
 				<a href="javascript:void(0)"
 				   className='menu__link menu__link--mobile-expand'

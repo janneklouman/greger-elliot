@@ -95,6 +95,18 @@
 			}
 		}
 
+		&--language-switch {
+			display: none;
+
+			@include mobile {
+				display: block;
+			}
+
+			@include mobile-landscape {
+				display: block;
+			}
+		}
+
 	}
 
 }

@@ -1,9 +1,44 @@
+.logo-holder {
+
+	@include mobile {
+		position: fixed;
+		top: 0;
+		padding: $padding-section #{$padding-section * 3};
+		left: 0;
+		text-align: center;
+		height: $height-logo-sm;
+		width: 100vw;
+		background: $color-white;
+	}
+
+	@include mobile-landscape {
+		display: none;
+	}
+
+}
+
 .logo {
 
 	max-width: 100%;
 
 	@include mobile {
 		display: none;
+	}
+
+
+	&--mobile {
+		display: none;
+		max-width: 100%;
+		max-height: 100%;
+		margin: 0 auto;
+
+		@include mobile {
+			display: block;
+		}
+
+		@include mobile-landscape {
+			display: none;
+		}
 	}
 
 }

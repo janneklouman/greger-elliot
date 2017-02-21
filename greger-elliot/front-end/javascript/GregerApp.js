@@ -108,9 +108,7 @@ class GregerApp extends React.Component {
      * @param   language	A language string eg. 'en'
      */
     handleOnLanguageSelectorClick(language) {
-
 		this.switchLanguage(language);
-
     }
 
     /**
@@ -124,7 +122,7 @@ class GregerApp extends React.Component {
             <div>
                 <section className="first">
                     <LogoComponent logo={this.state.logo} />
-					<NavigationComponent urlSegment={this.state.urlSegment} />
+					<NavigationComponent urlSegment={this.state.urlSegment} onLanguageChange={this.handleOnLanguageSelectorClick.bind(this)} />
                 </section>
                 <section className="second">
 					<LanguageSelectorComponent urlSegment={this.state.urlSegment} onLanguageChange={this.handleOnLanguageSelectorClick.bind(this)} />
