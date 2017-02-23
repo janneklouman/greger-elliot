@@ -171,17 +171,23 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
 .image-gallery-left-nav {
 	left: 0;
-	padding: 50% 150px 50% 15px;
+	padding: 50% 150px 50% 0;
 	&::before {
-		content: '◅';
+		background: url('../image/prev.png') no-repeat top left;
+		width: 50px;
+		height: 45px;
+		content: ' ';
 	}
 }
 
 .image-gallery-right-nav {
 	right: 0;
-	padding: 50% 15px 50% 150px;
+	padding: 50% 0px 50% 150px;
 	&::before {
-		content: '▻';
+		background: url('../image/next.png') no-repeat top left;
+		width: 50px;
+		height: 45px;
+		content: ' ';
 	}
 }
 
