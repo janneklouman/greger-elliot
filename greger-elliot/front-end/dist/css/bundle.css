@@ -132,24 +132,6 @@ body {
     .image-gallery-right-nav {
       font-size: 2.4em; } }
 
-.image-gallery-left-nav {
-  left: 0;
-  padding: 50% 150px 50% 0; }
-  .image-gallery-left-nav::before {
-    background: url("../image/prev.png") no-repeat top left;
-    width: 50px;
-    height: 45px;
-    content: ' '; }
-
-.image-gallery-right-nav {
-  right: 0;
-  padding: 50% 0px 50% 150px; }
-  .image-gallery-right-nav::before {
-    background: url("../image/next.png") no-repeat top left;
-    width: 50px;
-    height: 45px;
-    content: ' '; }
-
 .image-gallery-slides {
   line-height: 0;
   overflow: hidden;
@@ -518,6 +500,24 @@ p {
     .image-gallery-image img {
       max-height: calc(100vh - 40px - 10px); } }
 
+.image-gallery-left-nav {
+  left: 0;
+  padding: 50% 33% 50% 0; }
+  .image-gallery-left-nav::before {
+    background: url("../image/prev.png") no-repeat top left;
+    width: 50px;
+    height: 45px;
+    content: ' '; }
+
+.image-gallery-right-nav {
+  right: 0;
+  padding: 50% 0 50% 33%; }
+  .image-gallery-right-nav::before {
+    background: url("../image/next.png") no-repeat top left;
+    width: 50px;
+    height: 45px;
+    content: ' '; }
+
 .slide-show-description {
   height: 48px;
   line-height: 48px;
@@ -557,19 +557,12 @@ p {
     width: 100vw;
     height: 100vh; }
     .image-gallery:-webkit-full-screen .image-gallery-left-nav {
-      padding: 50% 33vw 50% 15px; }
+      padding: 50% 33vw 50% 0; }
     .image-gallery:-webkit-full-screen .image-gallery-right-nav {
-      padding: 50% 15px 50% 33vw; }
+      padding: 50% 0 50% 33vw; }
     .image-gallery:-webkit-full-screen .image-gallery-content {
       margin-top: 50vh;
       transform: translateY(-50%); }
-    .image-gallery:-webkit-full-screen .image-gallery__controls {
-      left: 50vw;
-      -webkit-transform: translateX(-50%);
-      -moz-transform: translateX(-50%);
-      -ms-transform: translateX(-50%);
-      -o-transform: translateX(-50%);
-      transform: translateX(-50%); }
     @media (max-width: 767px) {
       .image-gallery:-webkit-full-screen .image-gallery-image img {
         max-height: calc(100vh - 40px); } }
@@ -585,8 +578,17 @@ p {
       height: calc(100vh - 40px - 10px); } }
   .image-gallery__controls {
     position: fixed;
-    top: 10px;
-    opacity: .5; }
+    bottom: 10px;
+    right: 0;
+    opacity: .8; }
+    .image-gallery__controls:hover {
+      cursor: pointer;
+      opacity: .7;
+      -webkit-transition: all 400ms;
+      -moz-transition: all 400ms;
+      -ms-transition: all 400ms;
+      -o-transition: all 400ms;
+      transition: all 400ms; }
     @media (max-width: 767px) {
       .image-gallery__controls {
         right: 10px;
@@ -605,20 +607,21 @@ p {
         -o-transform: translateX(-50%);
         transform: translateX(-50%); } }
   .image-gallery__control {
-    display: inline-block;
+    display: block;
+    float: left;
     width: 23px;
     height: 23px;
     margin-right: 10px; }
-    .image-gallery__control:hover {
-      cursor: pointer;
-      opacity: .7;
-      -webkit-transition: all 400ms;
-      -moz-transition: all 400ms;
-      -ms-transition: all 400ms;
-      -o-transition: all 400ms;
-      transition: all 400ms; }
     .image-gallery__control--padded {
       padding: 3px; }
+  .image-gallery__control-label {
+    display: block;
+    height: 23px;
+    line-height: 23px;
+    float: left;
+    font-family: "roboto-medium", sans-serif;
+    font-size: 0.75rem;
+    margin-right: 7px; }
 
 #greger-elliot-root section.first {
   position: fixed;

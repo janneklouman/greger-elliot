@@ -1,7 +1,7 @@
 en:
   Controls:
     Next: 'Next'
-    Play: 'Play'
-    Pause: 'Pause'
+    Play: 'Resume slideshow'
+    Pause: 'Pause slideshow'
     Previous: 'Previous'
     Full_Screen: 'Full screen'

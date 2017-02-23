@@ -872,25 +872,18 @@ var SlideShowPageComponent = (function (_React$Component) {
 
 				return _react2['default'].createElement(
 					'div',
-					{ className: 'image-gallery__controls' },
-					_react2['default'].createElement('img', {
-						className: 'image-gallery__control image-gallery__control--padded',
-						src: 'greger-elliot/front-end/dist/image/left-arrow.svg',
-						onClick: _this.slideLeft.bind(_this), alt: '←', title: _this.props.page.translations.previous }),
+					{ className: 'image-gallery__controls', onClick: _this.playOrPause.bind(_this) },
+					_react2['default'].createElement(
+						'span',
+						{ className: 'image-gallery__control-label' },
+						_this.state.isPlaying ? _this.props.page.translations.pause : _this.props.page.translations.play
+					),
 					_react2['default'].createElement('img', {
 						className: 'image-gallery__control',
 						src: _this.state.isPlaying ? 'greger-elliot/front-end/dist/image/pause.svg' : 'greger-elliot/front-end/dist/image/play.svg',
-						onClick: _this.playOrPause.bind(_this), alt: '➤',
-						title: _this.state.isPlaying ? _this.props.page.translations.pause : _this.props.page.translations.play }),
-					_react2['default'].createElement('img', {
-						className: 'image-gallery__control image-gallery__control--padded',
-						src: 'greger-elliot/front-end/dist/image/right-arrow.svg',
-						onClick: _this.slideRight.bind(_this), alt: '→', title: _this.props.page.translations.next }),
-					_react2['default'].createElement('img', {
-						className: 'image-gallery__control image-gallery__control--padded',
-						src: 'greger-elliot/front-end/dist/image/full-screen.svg',
-						onClick: _this.enterOrExitFullScreen.bind(_this), alt: '⤢',
-						title: _this.props.page.translations.fullScreen })
+						alt: '➤',
+						title: _this.state.isPlaying ? _this.props.page.translations.pause : _this.props.page.translations.play
+					})
 				);
 			};
 

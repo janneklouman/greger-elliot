@@ -37,6 +37,28 @@
 
 }
 
+.image-gallery-left-nav {
+	left: 0;
+	padding: 50% 33% 50% 0;
+	&::before {
+		background: url('../image/prev.png') no-repeat top left;
+		width: 50px;
+		height: 45px;
+		content: ' ';
+	}
+}
+
+.image-gallery-right-nav {
+	right: 0;
+	padding: 50% 0 50% 33%;
+	&::before {
+		background: url('../image/next.png') no-repeat top left;
+		width: 50px;
+		height: 45px;
+		content: ' ';
+	}
+}
+
 .slide-show-description {
 
 	height: $height-slideshow-description;
@@ -94,26 +116,16 @@
 		height: 100vh;
 
 		.image-gallery-left-nav {
-			padding: 50% 33vw 50% 15px;
-
+			padding: 50% 33vw 50% 0;
 		}
 
 		.image-gallery-right-nav {
-			padding: 50% 15px 50% 33vw;
+			padding: 50% 0 50% 33vw;
 		}
 
 		.image-gallery-content {
 			margin-top: 50vh;
 			transform: translateY(-50%);
-		}
-
-		.image-gallery__controls {
-			left: 50vw;
-			-webkit-transform: translateX(-50%);
-			-moz-transform: translateX(-50%);
-			-ms-transform: translateX(-50%);
-			-o-transform: translateX(-50%);
-			transform: translateX(-50%);
 		}
 
 		.image-gallery-image img {
@@ -143,8 +155,19 @@
 
 	&__controls {
 		position: fixed;
-		top: $padding-section;
-		opacity: .5;
+		bottom: $padding-section;
+		right: 0;
+		opacity: .8;
+
+		&:hover {
+			cursor: pointer;
+			opacity: .7;
+			-webkit-transition: all 400ms;
+			-moz-transition: all 400ms;
+			-ms-transition: all 400ms;
+			-o-transition: all 400ms;
+			transition: all 400ms;
+		}
 
 		@include mobile {
 			right: $padding-section;
@@ -167,25 +190,26 @@
 	}
 
 	&__control {
-		display: inline-block;
+		display: block;
+		float: left;
 		width: 23px;
 		height: 23px;
 		margin-right: 10px;
 
-		&:hover {
-			cursor: pointer;
-			opacity: .7;
-			-webkit-transition: all 400ms;
-			-moz-transition: all 400ms;
-			-ms-transition: all 400ms;
-			-o-transition: all 400ms;
-			transition: all 400ms;
-		}
 
 		&--padded {
 			padding: 3px;
-
 		}
+	}
+
+	&__control-label {
+		display: block;
+		height: 23px;
+		line-height: 23px;
+		float: left;
+		font-family: $font-family-roboto-medium;
+		font-size: $font-size-label;
+		margin-right: 7px;
 	}
 
 }

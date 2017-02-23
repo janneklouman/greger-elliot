@@ -130,7 +130,7 @@ class SlideShowPageComponent extends React.Component {
 			slideInterval: 5000,
 			slideDuration: 500,
 			lazyLoad: true,
-			showNav: true, 
+			showNav: true,
 			showThumbnails: false,
 			autoPlay: autoPlay
 		};
@@ -143,33 +143,28 @@ class SlideShowPageComponent extends React.Component {
 		let renderControls = () => {
 
 			return (
-				<div className="image-gallery__controls">
-					<img
-						className="image-gallery__control image-gallery__control--padded"
-						src="greger-elliot/front-end/dist/image/left-arrow.svg"
-						onClick={this.slideLeft.bind(this)} alt="←" title={this.props.page.translations.previous} />
+				<div className="image-gallery__controls" onClick={this.playOrPause.bind(this)} >
+					<span className="image-gallery__control-label">
+						{
+							this.state.isPlaying
+								? this.props.page.translations.pause
+								: this.props.page.translations.play
+						}
+					</span>
 					<img
 						className="image-gallery__control"
 						src={
 						this.state.isPlaying
-						? 'greger-elliot/front-end/dist/image/pause.svg'
-						: 'greger-elliot/front-end/dist/image/play.svg'
-					}
-						onClick={this.playOrPause.bind(this)} alt="➤"
+							? 'greger-elliot/front-end/dist/image/pause.svg'
+							: 'greger-elliot/front-end/dist/image/play.svg'
+						}
+						alt="➤"
 						title={
-						this.state.isPlaying
-						? this.props.page.translations.pause
-						: this.props.page.translations.play
-					} />
-					<img
-						className="image-gallery__control image-gallery__control--padded"
-						src="greger-elliot/front-end/dist/image/right-arrow.svg"
-						onClick={this.slideRight.bind(this)} alt="→" title={this.props.page.translations.next} />
-					<img
-						className="image-gallery__control image-gallery__control--padded"
-						src="greger-elliot/front-end/dist/image/full-screen.svg"
-						onClick={this.enterOrExitFullScreen.bind(this)} alt="⤢"
-						title={this.props.page.translations.fullScreen} />
+							this.state.isPlaying
+							? this.props.page.translations.pause
+							: this.props.page.translations.play
+						}
+					/>
 				</div>
 			);
 

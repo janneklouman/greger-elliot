@@ -1,7 +1,7 @@
 sv:
   Controls:
     Next: 'Nästa'
-    Play: 'Spela'
-    Pause: 'Pausa'
+    Play: 'Återuppta bildspelet'
+    Pause: 'Pausa bildspelet'
     Previous: 'Föregående'
     Full_Screen: 'Helskärm'
